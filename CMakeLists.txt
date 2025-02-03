@@ -4,6 +4,8 @@ project(ARcane LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_subdirectory(external/spdlog)
+
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 
@@ -20,6 +22,7 @@ target_include_directories(ARcane PUBLIC
 )
 
 target_link_libraries(ARcane PUBLIC glfw OpenGL::GL)
+target_link_libraries(ARcane PRIVATE spdlog::spdlog)
 
 set_target_properties(ARcane PROPERTIES VERSION 1.0 SOVERSION 1)
 
