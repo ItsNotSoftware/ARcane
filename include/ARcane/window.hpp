@@ -37,6 +37,16 @@ class Window {
      */
     void renderFrame();
 
+    /**
+     * Sets the background color.
+     *
+     * @param r Red component in [0.0, 1.0].
+     * @param g Green component in [0.0, 1.0].
+     * @param b Blue component in [0.0, 1.0].
+     * @param a Alpha component in [0.0, 1.0].
+     */
+    void setBackgroundColor(float r, float g, float b, float a);
+
    private:
     /**
      * Adjusts the viewport when the framebuffer is resized.
@@ -58,9 +68,10 @@ class Window {
      */
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-    GLFWwindow* window;  // Pointer to the GLFW window.
-    uint32_t width;      // Window width.
-    uint32_t height;     // Window height.
+    GLFWwindow* window;                          // Pointer to the GLFW window.
+    uint32_t width;                              // Window width.
+    uint32_t height;                             // Window height.
+    float background[4] = {0.5, 0.5, 0.5, 1.0};  // Clear color red component.
 };
 
 }  // namespace ARcane
