@@ -46,7 +46,6 @@ Ensure your development environment meets the following requirements:
 - **Build System:** [CMake](https://cmake.org/) (version 3.10 or higher recommended)
 - **Graphics:** [OpenGL 3.3](https://www.opengl.org/) (or newer)
 - **Windowing:** [GLFW 3.3](https://www.glfw.org/) (or newer)
-- **Logging:** [spdlog](https://github.com/gabime/spdlog)
 
 ### Installation
 
@@ -60,6 +59,7 @@ Choose one of the following options to integrate ARcane into your project:
 
    ```bash
    git submodule add https://github.com/ItsNotSoftware/ARcane.git external/ARcane
+   git submodule update --init --recursive
    ```
 
 2. **Modify Your CMake Configuration:**
@@ -73,7 +73,17 @@ Choose one of the following options to integrate ARcane into your project:
 
 #### Option 2: Install as a Library
 
-1. **Compile the Library:**
+1. **Clone the Repository:**
+
+   Clone the ARcane repository to your local machine:
+
+   ```bash
+   git clone https://github.com/ItsNotSoftware/ARcane.git
+   cd ARcane
+   git submodule update --init --recursive
+   ```
+
+2. **Compile the Library:**
 
    ```bash
    mkdir build
@@ -82,13 +92,13 @@ Choose one of the following options to integrate ARcane into your project:
    make
    ```
 
-2. **Install the Library:**
+3. **Install the Library:**
 
    ```bash
    sudo make install
    ```
 
-3. **Link ARcane in Your Project:**
+4. **Link ARcane in Your Project:**
 
    Update your `CMakeLists.txt`:
 
