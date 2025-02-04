@@ -2,10 +2,8 @@
 
 extern ARcane::Application* ARcane::CreateApplication();
 
-int main(int argc, char** argv) {
+int main() {
     ARcane::Log::Init();
-    ARC_CORE_WARN("Initialized Log!");
-    ARC_INFO("Hello!");
 
     auto app = ARcane::CreateApplication();
     app->Run();
