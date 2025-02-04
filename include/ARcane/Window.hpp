@@ -6,6 +6,11 @@
 
 namespace ARcane {
 
+struct WindowProperties {
+    uint32_t Width, Height;
+    const char* Title;
+};
+
 class Window {
    public:
     Window(uint32_t width, uint32_t height, const char* title);
@@ -15,8 +20,9 @@ class Window {
 
    private:
     GLFWwindow* m_Window = nullptr;
-    uint32_t m_Width, m_Height;
-    const char* m_Title;
+    WindowProperties m_Props;
+
+    void SetEventCallbacks();
 };
 
 }  // namespace ARcane
