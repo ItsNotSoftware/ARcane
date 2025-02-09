@@ -1,22 +1,24 @@
 #include "ARcane/Window.hpp"
 
+#include "ARcane/Events/ApplicationEvent.hpp"
+#include "ARcane/Events/KeyEvent.hpp"
+#include "ARcane/Events/MouseEvent.hpp"
+
 namespace ARcane {
 
 static void GLFWErrorCallback(int error, const char* description) {
     ARC_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 }
 
-Window::Window(uint32_t width, uint32_t height, const char* title) {
-    m_Props.Width = width;
-    m_Props.Height = height;
-    m_Props.Title = title;
-
+Window::Window(uint32_t width, uint32_t height, const char* title)
+    : m_UserStruct(width, height, title) {
     if (!glfwInit()) {
         ARC_CORE_ERROR("Failed to initialize GLFW!");
         std::terminate();
     }
 
-    m_Window = glfwCreateWindow(m_Props.Width, m_Props.Height, m_Props.Title, nullptr, nullptr);
+    m_Window = glfwCreateWindow(m_UserStruct.Width, m_UserStruct.Height, m_UserStruct.Title,
+                                nullptr, nullptr);
     if (!m_Window) {
         ARC_CORE_ERROR("Failed to create window!");
         glfwTerminate();
@@ -38,54 +40,80 @@ Window::Window(uint32_t width, uint32_t height, const char* title) {
     ARC_CORE_INFO("\tVersion: {0}", (const char*)glGetString(GL_VERSION));
     std::cout << std::endl;
 
-    glfwSetWindowUserPointer(m_Window, &m_Props);  // Set window user pointer
+    glfwSetWindowUserPointer(m_Window, &m_UserStruct);  // Set window user pointer
     SetEventCallbacks();
 }
 
 void Window::SetEventCallbacks() {
-    // TODO: bind to user-defined callbacks
-
     glfwSetErrorCallback(GLFWErrorCallback);
 
     glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
-        WindowProperties& props = *(WindowProperties*)glfwGetWindowUserPointer(window);
-        props.Width = width;
-        props.Height = height;
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
+        usrStruct.Width = width;
+        usrStruct.Height = height;
+
+        WindowResizeEvent event(width, height);
+        usrStruct.EventCallback(event);
     });
 
-    glfwSetWindowCloseCallback(m_Window, [](GLFWwindow*) { ARC_CORE_INFO("Window close event"); });
+    glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
 
-    glfwSetKeyCallback(m_Window, [](GLFWwindow*, int key, int, int action, int) {
+        WindowCloseEvent event;
+        usrStruct.EventCallback(event);
+    });
+
+    glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int, int action, int) {
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
+
         switch (action) {
-            case GLFW_PRESS:
-                ARC_CORE_INFO("Key pressed: {0}", key);
+            case GLFW_PRESS: {
+                KeyPressedEvent event(key, 0);
+                usrStruct.EventCallback(event);
                 break;
-            case GLFW_RELEASE:
-                ARC_CORE_INFO("Key released: {0}", key);
+            }
+            case GLFW_RELEASE: {
+                KeyReleasedEvent event(key);
+                usrStruct.EventCallback(event);
                 break;
-            case GLFW_REPEAT:
-                ARC_CORE_INFO("Key repeated: {0}", key);
+            }
+            case GLFW_REPEAT: {
+                KeyPressedEvent event(key, 1);
+                usrStruct.EventCallback(event);
                 break;
+            }
         }
     });
 
-    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow*, int button, int action, int) {
+    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int) {
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
+
         switch (action) {
-            case GLFW_PRESS:
-                ARC_CORE_INFO("Mouse button pressed: {0}", button);
+            case GLFW_PRESS: {
+                MouseButtonPressedEvent event(button);
+                usrStruct.EventCallback(event);
                 break;
-            case GLFW_RELEASE:
-                ARC_CORE_INFO("Mouse button released: {0}", button);
+            }
+            case GLFW_RELEASE: {
+                MouseButtonReleasedEvent event(button);
+                usrStruct.EventCallback(event);
                 break;
+            }
         }
     });
 
-    glfwSetCursorPosCallback(m_Window, [](GLFWwindow*, double xpos, double ypos) {
-        ARC_CORE_INFO("Mouse position: ({0}, {1})", xpos, ypos);
+    glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos) {
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
+
+        MouseMovedEvent event((float)xpos, (float)ypos);
+        usrStruct.EventCallback(event);
     });
 
-    glfwSetScrollCallback(m_Window, [](GLFWwindow*, double xoffset, double yoffset) {
-        ARC_CORE_INFO("Mouse scroll: ({0}, {1})", xoffset, yoffset);
+    glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xoffset, double yoffset) {
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
+
+        MouseScrolledEvent event((float)xoffset, (float)yoffset);
+        usrStruct.EventCallback(event);
     });
 }
 
