@@ -11,17 +11,32 @@ Application::Application() {
 
 Application::~Application() {}
 
+void Application::PushLayer(Layer* layer) { m_LayerStack.PushLayer(layer); }
+
+void Application::PushOverlay(Layer* overlay) { m_LayerStack.PushOverlay(overlay); }
+
 void Application::OnEvent(Event& e) {
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
 
-    ARC_CORE_TRACE("{0}", e.ToString());
+    // Iterate through layers from top to bottom and pass the event to each layer until handled
+    for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+        (*--it)->OnEvent(e);
+        if (e.Handled) {
+            break;
+        }
+    }
 }
 
 void Application::Run() {
     while (m_Running) {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        for (auto layer : m_LayerStack) {
+            layer->OnUpdate();
+        }
+
         m_Window->Update();
     }
 }

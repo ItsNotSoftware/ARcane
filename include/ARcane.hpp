@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ARcane/Application.hpp"
+#include "ARcane/Layer.hpp"
 #include "ARcane/Log.hpp"
 
 // ---Entry Point---
