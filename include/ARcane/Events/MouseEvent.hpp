@@ -44,4 +44,44 @@ class MouseScrolledEvent : public Event {
     float m_XOffset, m_YOffset;
 };
 
+class MouseButtonPressedEvent : public Event {
+   public:
+    MouseButtonPressedEvent(int button) : m_Button(button) {}
+
+    inline int GetButton() const { return m_Button; }
+
+    std::string ToString() const override {
+        std::stringstream ss;
+        ss << "MouseButtonPressedEvent: " << m_Button;
+        return ss.str();
+    }
+
+    EVENT_CLASS_TYPE(MouseButtonPressed)
+    EVENT_CLASS_CATEGORY((int)EventCategory::Mouse | (int)EventCategory::MouseButton |
+                         (int)EventCategory::Input)
+
+   private:
+    int m_Button;
+};
+
+class MouseButtonReleasedEvent : public Event {
+   public:
+    MouseButtonReleasedEvent(int button) : m_Button(button) {}
+
+    inline int GetButton() const { return m_Button; }
+
+    std::string ToString() const override {
+        std::stringstream ss;
+        ss << "MouseButtonReleasedEvent: " << m_Button;
+        return ss.str();
+    }
+
+    EVENT_CLASS_TYPE(MouseButtonReleased)
+    EVENT_CLASS_CATEGORY((int)EventCategory::Mouse | (int)EventCategory::MouseButton |
+                         (int)EventCategory::Input)
+
+   private:
+    int m_Button;
+};
+
 }  // namespace ARcane
