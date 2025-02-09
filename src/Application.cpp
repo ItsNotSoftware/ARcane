@@ -11,7 +11,12 @@ Application::Application() {
 
 Application::~Application() {}
 
-void Application::OnEvent(Event& e) { ARC_CORE_INFO("{0}", e.ToString()); }
+void Application::OnEvent(Event& e) {
+    EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+
+    ARC_CORE_TRACE("{0}", e.ToString());
+}
 
 void Application::Run() {
     while (m_Running) {
@@ -19,6 +24,11 @@ void Application::Run() {
         glClear(GL_COLOR_BUFFER_BIT);
         m_Window->Update();
     }
+}
+
+bool Application::OnWindowClose(WindowCloseEvent&) {
+    m_Running = false;
+    return true;
 }
 
 }  // namespace ARcane
