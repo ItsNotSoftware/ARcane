@@ -10,5 +10,4 @@
 #include <exception>
 
 #include "ARcane/Log.hpp"
-
-#define BIT(x) (1 << x)
+#include "ARcane/Events/Event.hpp"

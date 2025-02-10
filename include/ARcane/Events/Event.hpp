@@ -2,6 +2,8 @@
 
 #include "ARcane/Core.hpp"
 
+#define BIT(x) (1 << x)
+
 namespace ARcane {
 
 /**

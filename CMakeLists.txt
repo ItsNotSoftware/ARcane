@@ -4,26 +4,55 @@ project(ARcane LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(external/spdlog)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g")
+
+add_subdirectory(external/spdlog)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 
-# Include Glad headers and source
-file(GLOB ARCANE_SOURCES "src/*.cpp" "src/*.c") # Should include glad.c
+# Gather your own project sources (e.g. your code and glad.c)
+file(GLOB ARCANE_SOURCES "src/*.cpp" "src/*.c")
 
-# TODO: Maybe change to shared library
-# Define a shared library
+# Define your main target (library or executable)
 add_library(ARcane STATIC ${ARCANE_SOURCES})
 
+# Add ImGui core source files.
+set(IMGUI_CORE_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_demo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_draw.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_tables.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_widgets.cpp
+)
 
+# Add the backend sources that match your project (GLFW + OpenGL3)
+set(IMGUI_BACKEND_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends/imgui_impl_glfw.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends/imgui_impl_opengl3.cpp
+)
+
+# Add std::string support if needed:
+set(IMGUI_STDLIB_SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/misc/cpp/imgui_stdlib.cpp
+)
+
+# Add all ImGui sources to your ARcane target.
+target_sources(ARcane PRIVATE
+    ${IMGUI_CORE_SOURCES}
+    ${IMGUI_BACKEND_SOURCES}
+    ${IMGUI_STDLIB_SOURCES}
+)
+
+# Set up include directories so that your code can find headers.
 target_include_directories(ARcane PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../glad/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui # For core ImGui headers (e.g., imgui.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends # For backend headers (e.g., imgui_impl_glfw.h)
 )
 
+# Link with other libraries
 target_link_libraries(ARcane PUBLIC
     glfw
     OpenGL::GL
