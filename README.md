@@ -134,6 +134,3 @@ class MyApp : public ARcane::Application {
 ARcane::Application* ARcane::CreateApplication() { return new MyApp(); }
 ```
 
-## Usage Example
-
-Once integrated, build and run your project. ARcane handles window initialization, camera streaming, and rendering, allowing you to focus on developing your application logic within the overridden `Run()` method.
