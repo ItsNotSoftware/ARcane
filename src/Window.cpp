@@ -12,11 +12,13 @@ static void GLFWErrorCallback(int error, const char* description) {
 
 Window::Window(uint32_t width, uint32_t height, const char* title)
     : m_UserStruct(width, height, title) {
+    // Initialize GLFW
     if (!glfwInit()) {
         ARC_CORE_ERROR("Failed to initialize GLFW!");
         std::terminate();
     }
 
+    // Create the window
     m_Window = glfwCreateWindow(m_UserStruct.Width, m_UserStruct.Height, m_UserStruct.Title,
                                 nullptr, nullptr);
     if (!m_Window) {
@@ -27,6 +29,7 @@ Window::Window(uint32_t width, uint32_t height, const char* title)
 
     glfwMakeContextCurrent(m_Window);
 
+    // Initialize GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         ARC_CORE_ERROR("Failed to initialize GLAD!");
         glfwDestroyWindow(m_Window);
@@ -34,6 +37,7 @@ Window::Window(uint32_t width, uint32_t height, const char* title)
         std::terminate();
     }
 
+    // Log openGL info
     ARC_CORE_INFO("OpenGL Info:");
     ARC_CORE_INFO("\tVendor: {0}", (const char*)glGetString(GL_VENDOR));
     ARC_CORE_INFO("\tRenderer: {0}", (const char*)glGetString(GL_RENDERER));
@@ -45,8 +49,9 @@ Window::Window(uint32_t width, uint32_t height, const char* title)
 }
 
 void Window::SetEventCallbacks() {
-    glfwSetErrorCallback(GLFWErrorCallback);
+    glfwSetErrorCallback(GLFWErrorCallback);  // Set error callback
 
+    // Window resize callback
     glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
         usrStruct.Width = width;
@@ -56,6 +61,7 @@ void Window::SetEventCallbacks() {
         usrStruct.EventCallback(event);
     });
 
+    // Window close callback
     glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
 
@@ -63,6 +69,7 @@ void Window::SetEventCallbacks() {
         usrStruct.EventCallback(event);
     });
 
+    // Key press callback
     glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int, int action, int) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
 
@@ -85,6 +92,7 @@ void Window::SetEventCallbacks() {
         }
     });
 
+    // Mouse button press callback
     glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
 
@@ -102,6 +110,7 @@ void Window::SetEventCallbacks() {
         }
     });
 
+    // Mouse move callback
     glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
 
@@ -109,6 +118,7 @@ void Window::SetEventCallbacks() {
         usrStruct.EventCallback(event);
     });
 
+    // Mouse scroll callback
     glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xoffset, double yoffset) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
 
@@ -118,6 +128,7 @@ void Window::SetEventCallbacks() {
 }
 
 Window::~Window() {
+    // Destroy the window and terminate GLFW
     if (m_Window) {
         glfwDestroyWindow(m_Window);
     }
