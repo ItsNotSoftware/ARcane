@@ -115,25 +115,23 @@ ARcane provides a standalone application with its own `main()` function. To embe
 #include "ARcane.hpp" // If ARcane is used as a submodule
 #include <ARcane.hpp> // If ARcane is installed as a library
 
-class YourAppMainClass : public ARcane::Application {
-public:
-    YourAppMainClass() {
-        // Initialize your application here.
-    };
+class ExampleLayer : public ARcane::Layer {
+   public:
+    ExampleLayer() : Layer("Example") {}
+    ~ExampleLayer() {}
 
-    void Run() override {
-        // Your custom application logic here.
-    }
+    void OnUpdate() override { ARC_INFO("ExampleLayer::Update"); }
 
-    ~YourAppMainClass() {
-        // Clean up your application here.
-    };
+    void OnEvent(ARcane::Event& event) override { ARC_TRACE("{0}", event.ToString()); }
 };
 
-// This function is called by ARcane to create your application instance.
-ARcane::Application* ARcane::CreateApplication() {
-    return new YourAppMainClass();
-}
+class MyApp : public ARcane::Application {
+   public:
+    MyApp() { PushLayer(new ExampleLayer()); }
+    ~MyApp() {}
+};
+
+ARcane::Application* ARcane::CreateApplication() { return new MyApp(); }
 ```
 
 ## Usage Example
