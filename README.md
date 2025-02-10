@@ -109,7 +109,7 @@ Choose one of the following options to integrate ARcane into your project:
 
 ## Integration into Your Project
 
-ARcane provides a standalone application with its own `main()` function. To embed ARcane within your own project, derive from the `ARcane::Application` class and override the `Run()` method with your custom logic.
+ARcane provides a standalone application with its own `main()` function. To embed ARcane within your own project, derive from the `ARcane::Application` class.
 
 ```cpp
 #include "ARcane.hpp" // If ARcane is used as a submodule
