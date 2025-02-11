@@ -2,27 +2,36 @@
 
 namespace ARcane {
 
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+Application* Application::s_Instance = nullptr;
 
 Application::Application() {
+    ARC_CORE_ASSERT(!s_Instance, "Application already exists!");
+    s_Instance = this;
+
     // Create the application window
-    m_Window = std::make_unique<Window>(1280, 720, "ARcane Engine");
+    m_Window = std::make_unique<Window>(1800, 1200, "ARcane Engine");
 
     // Bind event handling to this application instance
-    m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+    m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 }
 
 Application::~Application() {}
 
-void Application::PushLayer(Layer* layer) { m_LayerStack.PushLayer(layer); }
+void Application::PushLayer(Layer* layer) {
+    m_LayerStack.PushLayer(layer);
+    layer->OnAttach();
+}
 
-void Application::PushOverlay(Layer* overlay) { m_LayerStack.PushOverlay(overlay); }
+void Application::PushOverlay(Layer* overlay) {
+    m_LayerStack.PushOverlay(overlay);
+    overlay->OnAttach();
+}
 
 void Application::OnEvent(Event& e) {
     EventDispatcher dispatcher(e);
 
     // Handle window close events
-    dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
+    dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 
     // Pass the event to layers from top to bottom
     for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
