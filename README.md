@@ -10,14 +10,11 @@
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+  - [Installing Dependencies](#installing-dependencies)
+  - [Project Integration](#Project Integration)
     - [Option 1: Git Submodule](#option-1-git-submodule)
     - [Option 2: Install as a Library](#option-2-install-as-a-library)
-- [Integration into Your Project](#integration-into-your-project)
-- [Usage Example](#usage-example)
-- [License](#license)
-- [Contributing](#contributing)
-- [Contact](#contact)
+- [Usage](#Usage)
 
 ## Features
 
@@ -36,28 +33,64 @@
 - **Modular Architecture:**  
   Whether you’re using ARcane as a standalone application or integrating it into a larger system, its modular design makes it easy to extend and adapt.
 
+---
+
 ## Getting Started
 
-### Prerequisites
+### **Prerequisites**
 
 Ensure your development environment meets the following requirements:
 
 - **Compiler:** A C++17 (or newer) compliant compiler
-- **Build System:** [CMake](https://cmake.org/) (version 3.10 or higher recommended)
+- **Build System:** [CMake](https://cmake.org/) (version 3.15 or higher recommended)
 - **Graphics:** [OpenGL 3.3](https://www.opengl.org/) (or newer)
-- **Windowing:** [GLFW 3.3](https://www.glfw.org/) (or newer)
 
-### Installation
+---
 
-Choose one of the following options to integrate ARcane into your project:
+## Installing Dependencies
 
-#### Option 1: Git Submodule
+Before building ARcane, install the required system libraries and tools.
+
+### **🖥️ Linux (Ubuntu/Debian)**
+
+```sh
+sudo apt update
+sudo apt install cmake g++ libxkbcommon-dev libgl1-mesa-dev libglu1-mesa-dev libwayland-dev \
+libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev libx11-dev
+```
+
+### **🖥️ Arch Linux**
+
+```sh
+sudo pacman -S cmake gcc xorg-xrandr xorg-xinput xorg-xwayland libxkbcommon wayland
+```
+
+### **🖥️ Fedora**
+
+```sh
+sudo dnf install cmake gcc-c++ mesa-libGL-devel mesa-libGLU-devel libX11-devel \
+libXcursor-devel libXi-devel libXrandr-devel libxkbcommon-devel wayland-devel
+```
+
+### **🖥️ macOS (Homebrew)**
+
+```sh
+brew install cmake glfw
+```
+
+---
+
+## Project Integration
+
+Choose one of the following options to integrate ARcane into your project.
+
+### **Option 1: Git Submodule**
 
 1. **Add ARcane as a Submodule:**
 
    Navigate to your project's root directory and add ARcane as a submodule (for example, under `external/`):
 
-   ```bash
+   ```sh
    git submodule add https://github.com/ItsNotSoftware/ARcane.git external/ARcane
    git submodule update --init --recursive
    ```
@@ -71,13 +104,13 @@ Choose one of the following options to integrate ARcane into your project:
    target_link_libraries(YourProject ARcane)
    ```
 
-#### Option 2: Install as a Library
+---
+
+### **Option 2: Install as a Library**
 
 1. **Clone the Repository:**
 
-   Clone the ARcane repository to your local machine:
-
-   ```bash
+   ```sh
    git clone https://github.com/ItsNotSoftware/ARcane.git
    cd ARcane
    git submodule update --init --recursive
@@ -85,7 +118,7 @@ Choose one of the following options to integrate ARcane into your project:
 
 2. **Compile the Library:**
 
-   ```bash
+   ```sh
    mkdir build
    cd build
    cmake ..
@@ -94,20 +127,20 @@ Choose one of the following options to integrate ARcane into your project:
 
 3. **Install the Library:**
 
-   ```bash
+   ```sh
    sudo make install
    ```
 
 4. **Link ARcane in Your Project:**
-
-   Update your `CMakeLists.txt`:
 
    ```cmake
    find_package(ARcane REQUIRED)
    target_link_libraries(YourProject ARcane::ARcane)
    ```
 
-## Integration into Your Project
+---
+
+## Usage
 
 ARcane provides a standalone application with its own `main()` function. To embed ARcane within your own project, derive from the `ARcane::Application` class.
 
@@ -133,4 +166,3 @@ class MyApp : public ARcane::Application {
 
 ARcane::Application* ARcane::CreateApplication() { return new MyApp(); }
 ```
-

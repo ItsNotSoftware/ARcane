@@ -134,32 +134,44 @@ constexpr int RightSuper = 347;
 constexpr int Menu = 348;
 }  // namespace Key
 
-// @class Input
-// @brief Provides functions for input polling, such as checking keyboard and mouse state.
-//
-// The Input class allows querying for key presses, mouse button presses, and mouse position.
+/**
+ * @class Input
+ * @brief Provides functions for input polling, such as checking keyboard and mouse state.
+ *
+ * The Input class allows querying for key presses, mouse button presses, and mouse position.
+ */
 class Input {
    public:
-    // @brief Checks if a specific key is currently pressed.
-    // @param keycode The key to check.
-    // @return True if the key is pressed, false otherwise.
+    /**
+     * @brief Checks if a specific key is currently pressed.
+     * @param keycode The key to check.
+     * @return True if the key is pressed, false otherwise.
+     */
     static bool IsKeyPressed(KeyCode keycode);
 
-    // @brief Checks if a specific mouse button is currently pressed.
-    // @param button The mouse button index.
-    // @return True if the button is pressed, false otherwise.
+    /**
+     * @brief Checks if a specific mouse button is currently pressed.
+     * @param button The mouse button index.
+     * @return True if the button is pressed, false otherwise.
+     */
     static bool IsMouseButtonPressed(int button);
 
-    // @brief Retrieves the current mouse cursor position.
-    // @return A pair containing the X and Y coordinates of the mouse.
+    /**
+     * @brief Retrieves the current mouse cursor position.
+     * @return A pair containing the X and Y coordinates of the mouse.
+     */
     static std::pair<float, float> GetMousePosition();
 
-    // @brief Retrieves the current X-coordinate of the mouse cursor.
-    // @return The X position of the mouse.
+    /**
+     * @brief Retrieves the current X-coordinate of the mouse cursor.
+     * @return The X position of the mouse.
+     */
     static float GetMouseX();
 
-    // @brief Retrieves the current Y-coordinate of the mouse cursor.
-    // @return The Y position of the mouse.
+    /**
+     * @brief Retrieves the current Y-coordinate of the mouse cursor.
+     * @return The Y position of the mouse.
+     */
     static float GetMouseY();
 };
 

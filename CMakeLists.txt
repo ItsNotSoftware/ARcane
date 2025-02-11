@@ -6,15 +6,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g")
 
-# Submodules
-add_subdirectory(external/spdlog)
-add_subdirectory(external/glfw)
 
 # Submodule initialization check
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
     message(FATAL_ERROR "Submodules missing! Run:\n\tgit submodule update --init --recursive")
 endif()
 
+# Submodules
+add_subdirectory(external/spdlog)
+add_subdirectory(external/glfw)
+add_subdirectory(external/glm)
 
 find_package(OpenGL REQUIRED)
 
@@ -62,6 +63,7 @@ target_include_directories(ARcane PUBLIC
 # Link with other libraries
 target_link_libraries(ARcane PUBLIC
     glfw
+    glm
     OpenGL::GL
     spdlog::spdlog
 )
