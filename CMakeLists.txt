@@ -6,10 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g")
 
+# Submodules
 add_subdirectory(external/spdlog)
+add_subdirectory(external/glfw)
+
+# Submodule initialization check
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
+    message(FATAL_ERROR "Submodules missing! Run:\n\tgit submodule update --init --recursive")
+endif()
+
 
 find_package(OpenGL REQUIRED)
-find_package(glfw3 REQUIRED)
 
 # Gather your own project sources (e.g. your code and glad.c)
 file(GLOB ARCANE_SOURCES "src/*.cpp" "src/*.c")
