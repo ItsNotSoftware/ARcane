@@ -51,7 +51,7 @@ Ensure your development environment meets the following requirements:
 
 Before building ARcane, install the required system libraries and tools.
 
-### **🖥️ Linux (Ubuntu/Debian)**
+### **Ubuntu/Debian**
 
 ```sh
 sudo apt update
@@ -59,20 +59,20 @@ sudo apt install cmake g++ libxkbcommon-dev libgl1-mesa-dev libglu1-mesa-dev lib
 libxrandr-dev libxi-dev libxcursor-dev libxinerama-dev libx11-dev
 ```
 
-### **🖥️ Arch Linux**
+### **Arch Linux**
 
 ```sh
 sudo pacman -S cmake gcc xorg-xrandr xorg-xinput xorg-xwayland libxkbcommon wayland
 ```
 
-### **🖥️ Fedora**
+### **Fedora**
 
 ```sh
 sudo dnf install cmake gcc-c++ mesa-libGL-devel mesa-libGLU-devel libX11-devel \
 libXcursor-devel libXi-devel libXrandr-devel libxkbcommon-devel wayland-devel
 ```
 
-### **🖥️ macOS (Homebrew)**
+### **macOS (Homebrew)**
 
 ```sh
 brew install cmake glfw
