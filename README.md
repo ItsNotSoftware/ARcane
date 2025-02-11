@@ -11,7 +11,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installing Dependencies](#installing-dependencies)
-  - [Project Integration](#Project Integration)
+  - [Project Integration](#project-integration)
     - [Option 1: Git Submodule](#option-1-git-submodule)
     - [Option 2: Install as a Library](#option-2-install-as-a-library)
 - [Usage](#Usage)
