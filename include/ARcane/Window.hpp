@@ -3,8 +3,9 @@
 #include "Events/Event.hpp"
 
 #include "ARcane/Core.hpp"
-#include <glad/glad.h>  //! Must be included before GLFW
-#include <GLFW/glfw3.h>
+#include "ARcane/Renderer/GraphicsContext.hpp"
+
+struct GLFWwindow;
 
 namespace ARcane {
 
@@ -83,6 +84,7 @@ class Window {
 
    private:
     GLFWwindow* m_Window = nullptr;  // Native window handle
+    GraphicsContext* m_Context;      // Graphics context for rendering
     WindowUserStruct m_UserStruct;   // Stores window properties and callbacks
 
     /**

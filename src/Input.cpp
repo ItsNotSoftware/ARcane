@@ -2,7 +2,6 @@
 #include "ARcane/Window.hpp"
 #include "ARcane/Application.hpp"
 
-#include <glad/glad.h>  //! Needs to be included before GLFW
 #include <GLFW/glfw3.h>
 
 namespace ARcane {

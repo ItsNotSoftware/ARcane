@@ -4,6 +4,8 @@
 #include "ARcane/Events/KeyEvent.hpp"
 #include "ARcane/Events/MouseEvent.hpp"
 
+#include <GLFW/glfw3.h>
+
 namespace ARcane {
 
 static void GLFWErrorCallback(int error, const char* description) {
@@ -13,29 +15,15 @@ static void GLFWErrorCallback(int error, const char* description) {
 Window::Window(uint32_t width, uint32_t height, const char* title)
     : m_UserStruct(width, height, title) {
     // Initialize GLFW
-    if (!glfwInit()) {
-        ARC_CORE_ERROR("Failed to initialize GLFW!");
-        std::terminate();
-    }
+    int glfwInitialized = glfwInit();
+    ARC_CORE_ASSERT(glfwInitialized, "Failed to initialize GLFW!");
 
     // Create the window
     m_Window = glfwCreateWindow(m_UserStruct.Width, m_UserStruct.Height, m_UserStruct.Title,
                                 nullptr, nullptr);
-    if (!m_Window) {
-        ARC_CORE_ERROR("Failed to create window!");
-        glfwTerminate();
-        std::terminate();
-    }
 
-    glfwMakeContextCurrent(m_Window);
-
-    // Initialize GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        ARC_CORE_ERROR("Failed to initialize GLAD!");
-        glfwDestroyWindow(m_Window);
-        glfwTerminate();
-        std::terminate();
-    }
+    m_Context = new GraphicsContext(m_Window);
+    m_Context->Init();  //? Maybe move to constructor?
 
     // Log openGL info
     ARC_CORE_INFO("OpenGL Info:");
@@ -139,12 +127,11 @@ Window::~Window() {
     if (m_Window) {
         glfwDestroyWindow(m_Window);
     }
-    glfwTerminate();  //? Move this to Application destructor?
 }
 
 void Window::Update() {
     glfwPollEvents();
-    glfwSwapBuffers(m_Window);
+    m_Context->SwapBuffers();
 }
 
 }  // namespace ARcane
