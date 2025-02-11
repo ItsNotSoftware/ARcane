@@ -8,8 +8,9 @@
 =======
 
 #include "ARcane/ImGuiLayer.hpp"
->>>>>>> Stashed changes
+    >>>>>>> Stashed changes
+#include "ARcane/ImGuiLayer.hpp"
 
 // ---Entry Point---
 #include "ARcane/EntryPoint.hpp"
-// ------------------
+    // ------------------

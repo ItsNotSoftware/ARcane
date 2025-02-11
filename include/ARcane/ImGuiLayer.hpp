@@ -8,6 +8,7 @@
 
 namespace ARcane {
 
+<<<<<<< HEAD
 /**
  * @class ImGuiLayer
  * @brief A layer for integrating ImGui into the application.
@@ -60,6 +61,17 @@ class ImGuiLayer : public Layer {
      * This method processes events and forwards them to ImGui for handling.
      */
     void OnEvent(Event& event);
+=======
+class ImGuiLayer : public Layer {
+   public:
+    ImGuiLayer();
+    ~ImGuiLayer();
+
+    void OnAttach();
+    void OnDetach();
+    void OnUpdate();
+    void OnEvent(Event&);
+>>>>>>> 4ca001afdc0a19a36da49aef12fc4fbc3ba23c36
 
    private:
     float m_Time = 0.0f;  // Time of the last frame

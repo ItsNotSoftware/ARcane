@@ -2,6 +2,8 @@
 
 #include "ARcane/Core.hpp"
 
+#define BIT(x) (1 << x)
+
 namespace ARcane {
 
 /**
@@ -20,6 +22,7 @@ enum class EventType {
     AppRender,
     KeyPressed,
     KeyReleased,
+    KeyTyped,
     MouseButtonPressed,
     MouseButtonReleased,
     MouseMoved,

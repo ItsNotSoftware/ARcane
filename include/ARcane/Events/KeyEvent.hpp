@@ -89,11 +89,17 @@ class KeyReleasedEvent : public KeyEvent {
     EVENT_CLASS_TYPE(KeyReleased)
 };
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 class KeyTypedEvent : public KeyEvent {
    public:
     KeyTypedEvent(KeyCode keycode) : KeyEvent(keycode) {}
+=======
+class KeyTypedEvent : public KeyEvent {
+   public:
+    KeyTypedEvent(int keycode) : KeyEvent(keycode) {}
+>>>>>>> 4ca001afdc0a19a36da49aef12fc4fbc3ba23c36
 
     std::string ToString() const override {
         std::stringstream ss;
@@ -104,5 +110,8 @@ class KeyTypedEvent : public KeyEvent {
     EVENT_CLASS_TYPE(KeyTyped)
 };
 
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 4ca001afdc0a19a36da49aef12fc4fbc3ba23c36
 }  // namespace ARcane
