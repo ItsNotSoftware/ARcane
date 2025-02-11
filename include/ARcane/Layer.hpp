@@ -71,7 +71,7 @@ class Layer {
 
 /*
     ============================
-    Example Usage:
+    *Example Usage:
     ============================
 
     class ExampleLayer : public ARcane::Layer {

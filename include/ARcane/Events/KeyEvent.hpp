@@ -14,7 +14,7 @@ class KeyEvent : public Event {
      * @brief Gets the key code of the event.
      * @return The key code.
      */
-    inline int GetKeyCode() const { return m_KeyCode; }
+    inline KeyCode GetKeyCode() const { return m_KeyCode; }
 
     EVENT_CLASS_CATEGORY((int)EventCategory::Keyboard | (int)EventCategory::Input)
 
@@ -23,9 +23,9 @@ class KeyEvent : public Event {
      * @brief Constructs a KeyEvent.
      * @param keycode The key code of the event.
      */
-    KeyEvent(int keycode) : m_KeyCode(keycode) {}
+    KeyEvent(KeyCode keycode) : m_KeyCode(keycode) {}
 
-    int m_KeyCode;  // The key code associated with the event.
+    KeyCode m_KeyCode;  // The key code associated with the event.
 };
 
 /**
@@ -39,7 +39,8 @@ class KeyPressedEvent : public KeyEvent {
      * @param keycode The key that was pressed.
      * @param repeatCount The number of times the key was repeated.
      */
-    KeyPressedEvent(int keycode, int repeatCount) : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
+    KeyPressedEvent(KeyCode keycode, int repeatCount)
+        : KeyEvent(keycode), m_RepeatCount(repeatCount) {}
 
     /**
      * @brief Gets the repeat count of the key press.
@@ -73,7 +74,7 @@ class KeyReleasedEvent : public KeyEvent {
      * @brief Constructs a KeyReleasedEvent.
      * @param keycode The key that was released.
      */
-    KeyReleasedEvent(int keycode) : KeyEvent(keycode) {}
+    KeyReleasedEvent(KeyCode keycode) : KeyEvent(keycode) {}
 
     /**
      * @brief Converts the event to a string. Used for debugging/logging.
@@ -88,4 +89,20 @@ class KeyReleasedEvent : public KeyEvent {
     EVENT_CLASS_TYPE(KeyReleased)
 };
 
+<<<<<<< Updated upstream
+=======
+class KeyTypedEvent : public KeyEvent {
+   public:
+    KeyTypedEvent(KeyCode keycode) : KeyEvent(keycode) {}
+
+    std::string ToString() const override {
+        std::stringstream ss;
+        ss << "KeyTypedEvent: " << m_KeyCode;
+        return ss.str();
+    }
+
+    EVENT_CLASS_TYPE(KeyTyped)
+};
+
+>>>>>>> Stashed changes
 }  // namespace ARcane

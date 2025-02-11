@@ -1,9 +1,18 @@
 #pragma once
 
+<<<<<<< Updated upstream
 #include "Window.hpp"
 #include "Events/Event.hpp"
 #include "Events/ApplicationEvent.hpp"
 #include "Events/KeyEvent.hpp"
+=======
+#include "ARcane/Core.hpp"
+#include "ARcane/Window.hpp"
+#include "ARcane/Input.hpp"
+#include "ARcane/Events/Event.hpp"
+#include "ARcane/Events/ApplicationEvent.hpp"
+#include "ARcane/Events/KeyEvent.hpp"
+>>>>>>> Stashed changes
 #include "ARcane/LayerStack.hpp"
 
 namespace ARcane {
@@ -77,7 +86,7 @@ Application* CreateApplication();
 
 /*
     ============================
-    Example Usage:
+    *Example Usage:
     ============================
 
     class ExampleLayer : public ARcane::Layer {
