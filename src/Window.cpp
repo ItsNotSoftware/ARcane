@@ -92,6 +92,13 @@ void Window::SetEventCallbacks() {
         }
     });
 
+    glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
+        WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);
+
+        KeyTypedEvent event(keycode);
+        usrStruct.EventCallback(event);
+    });
+
     // Mouse button press callback
     glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int) {
         WindowUserStruct& usrStruct = *(WindowUserStruct*)glfwGetWindowUserPointer(window);

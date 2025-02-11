@@ -16,18 +16,9 @@ class ImGuiLayer : public Layer {
     void OnAttach();
     void OnDetach();
     void OnUpdate();
-    void OnEvent(Event& event);
+    void OnEvent(Event&);
 
    private:
-    bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& event);
-    bool OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& event);
-    bool OnMouseMovedEvent(MouseMovedEvent& event);
-    bool OnMouseScrolledEvent(MouseScrolledEvent& event);
-    bool OnKeyPressedEvent(KeyPressedEvent& event);
-    bool OnKeyReleasedEvent(KeyReleasedEvent& event);
-    // void OnKeyTypedEvent(KeyTypedEvent& event);
-    bool OnWindowResizeEvent(WindowResizeEvent& event);
-
     float m_Time = 0.0f;  // Time of the last frame
 };
 
