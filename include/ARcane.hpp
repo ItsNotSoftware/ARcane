@@ -2,9 +2,9 @@
 
 #include "ARcane/Application.hpp"
 #include "ARcane/Input.hpp"
-#include "ARcane/Layer.hpp"
+#include "ARcane/Layers/Layer.hpp"
 #include "ARcane/Log.hpp"
-#include "ARcane/ImGuiLayer.hpp"
+#include "ARcane/Layers/ImGuiLayer.hpp"
 
 // ---Entry Point---
 #include "ARcane/EntryPoint.hpp"

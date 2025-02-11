@@ -7,8 +7,8 @@
 #include "ARcane/Events/Event.hpp"
 #include "ARcane/Events/ApplicationEvent.hpp"
 #include "ARcane/Events/KeyEvent.hpp"
-#include "ARcane/LayerStack.hpp"
-#include "ARcane/Layer.hpp"
+#include "ARcane/Layers/LayerStack.hpp"
+#include "ARcane/Layers/Layer.hpp"
 
 namespace ARcane {
 

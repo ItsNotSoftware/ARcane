@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ARcane/Core.hpp"
-#include "ARcane/Layer.hpp"
+#include "ARcane/Layers/Layer.hpp"
 
 namespace ARcane {
 
