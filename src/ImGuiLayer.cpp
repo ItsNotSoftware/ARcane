@@ -2,7 +2,6 @@
 
 #include "ARcane/Core.hpp"
 #include "ARcane/Application.hpp"
-#include "glad/glad.h"  //! glad must be included before glfw3.h
 #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

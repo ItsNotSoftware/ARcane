@@ -48,10 +48,6 @@ void Application::OnEvent(Event& e) {
 
 void Application::Run() {
     while (m_Running) {
-        // Clear the screen with a dark gray color
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         // Update all active layers
         for (auto layer : m_LayerStack) {
             layer->OnUpdate();
