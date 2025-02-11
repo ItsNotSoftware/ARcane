@@ -24,7 +24,11 @@ void ImGuiLayer::OnAttach() {
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
     ImGui::StyleColorsDark();
 
+    // Initialize platform/renderer bindings
+    // Set to false to disable GLFW callbacks, and bind them manually in OnEvent() func
+    // If set to true, disable OnEvent() in ImGuiLayer and GLFW callbacks will be used
     ImGui_ImplGlfw_InitForOpenGL(window, true);
+
     ImGui_ImplOpenGL3_Init("#version 460");
 }
 
@@ -50,56 +54,6 @@ void ImGuiLayer::OnUpdate() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImGuiLayer::OnEvent(Event& event) {
-    // Dispatch events to this event handlers
-    EventDispatcher dispatcher(event);
-    dispatcher.Dispatch<MouseButtonPressedEvent>(
-        BIND_EVENT_FN(ImGuiLayer::OnMouseButtonPressedEvent));
-    dispatcher.Dispatch<MouseButtonReleasedEvent>(
-        BIND_EVENT_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
-    dispatcher.Dispatch<MouseMovedEvent>(BIND_EVENT_FN(ImGuiLayer::OnMouseMovedEvent));
-    dispatcher.Dispatch<MouseScrolledEvent>(BIND_EVENT_FN(ImGuiLayer::OnMouseScrolledEvent));
-    dispatcher.Dispatch<KeyPressedEvent>(BIND_EVENT_FN(ImGuiLayer::OnKeyPressedEvent));
-    dispatcher.Dispatch<KeyReleasedEvent>(BIND_EVENT_FN(ImGuiLayer::OnKeyReleasedEvent));
-    dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(ImGuiLayer::OnWindowResizeEvent));
-}
-
-bool ImGuiLayer::OnMouseButtonPressedEvent(MouseButtonPressedEvent& event) {
-    ImGuiIO& io = ImGui::GetIO();
-    io.MouseDown[event.GetButton()] = true;
-
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
-
-bool ImGuiLayer::OnMouseButtonReleasedEvent(MouseButtonReleasedEvent& event) {
-    ImGuiIO& io = ImGui::GetIO();
-    io.MouseDown[event.GetButton()] = false;
-
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
-
-bool ImGuiLayer::OnMouseScrolledEvent(MouseScrolledEvent& event) {
-    ImGuiIO& io = ImGui::GetIO();
-    io.MouseWheelH += event.GetXOffset();
-    io.MouseWheel += event.GetYOffset();
-
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
-
-bool ImGuiLayer::OnMouseMovedEvent(MouseMovedEvent& event) {
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
-
-bool ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& event) {
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
-
-bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& event) {
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
-
-bool ImGuiLayer::OnWindowResizeEvent(WindowResizeEvent& event) {
-    return false;  // Mark event as unhandled (propagate to other layers)
-}
+void ImGuiLayer::OnEvent(Event&) {}
 
 };  // namespace ARcane
