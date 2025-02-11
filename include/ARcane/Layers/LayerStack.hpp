@@ -71,8 +71,8 @@ class LayerStack {
     std::vector<Layer*>::iterator end() { return m_Layers.end(); }
 
    private:
-    std::vector<Layer*> m_Layers;                 // Layers are stored in a vector
-    std::vector<Layer*>::iterator m_LayerInsert;  // Iterator to the first overlay
+    std::vector<Layer*> m_Layers;         // Layers are stored in a vector
+    unsigned int m_LayerInsertIndex = 0;  // Index to insert layers
 };
 
 }  // namespace ARcane

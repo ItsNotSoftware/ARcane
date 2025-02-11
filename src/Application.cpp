@@ -11,6 +11,10 @@ Application::Application() {
     // Create the application window
     m_Window = std::make_unique<Window>(1800, 1200, "ARcane Engine");
 
+    // Initialize ImGui
+    m_ImGuiLayer = new ImGuiLayer;
+    PushOverlay(m_ImGuiLayer);
+
     // Bind event handling to this application instance
     m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 }
@@ -52,6 +56,13 @@ void Application::Run() {
         for (auto layer : m_LayerStack) {
             layer->OnUpdate();
         }
+
+        // Render ImGui elements
+        m_ImGuiLayer->Begin();
+        for (auto layer : m_LayerStack) {
+            layer->OnImGuiRender();
+        }
+        m_ImGuiLayer->End();
 
         // Update the window (handle input, buffer swaps, etc.)
         m_Window->Update();

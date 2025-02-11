@@ -13,10 +13,13 @@ class ImGuiLayer : public Layer {
     ImGuiLayer();
     ~ImGuiLayer();
 
-    void OnAttach();
-    void OnDetach();
-    void OnUpdate();
-    void OnEvent(Event&);
+    virtual void OnAttach() override;
+    virtual void OnDetach() override;
+    virtual void OnEvent(Event&) override;
+    virtual void OnImGuiRender() override;
+
+    void Begin();
+    void End();
 
    private:
     float m_Time = 0.0f;  // Time of the last frame

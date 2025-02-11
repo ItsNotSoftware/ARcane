@@ -63,6 +63,13 @@ class Layer {
      */
     inline const std::string& GetName() const { return m_DebugName; }
 
+    /**
+     * @brief Called to render ImGui elements.
+     *
+     * This method can be overridden by derived classes to render ImGui elements.
+     */
+    virtual void OnImGuiRender() {}
+
    protected:
     std::string m_DebugName;  // The name of the layer. DEBUG only!
 };

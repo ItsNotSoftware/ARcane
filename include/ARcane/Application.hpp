@@ -9,6 +9,7 @@
 #include "ARcane/Events/KeyEvent.hpp"
 #include "ARcane/Layers/LayerStack.hpp"
 #include "ARcane/Layers/Layer.hpp"
+#include "ARcane/Layers/ImGuiLayer.hpp"
 
 namespace ARcane {
 
@@ -76,9 +77,10 @@ class Application {
      */
     bool OnWindowClose(WindowCloseEvent& e);
 
-    std::unique_ptr<Window> m_Window;  // Application window instance.
-    bool m_Running = true;             // Indicates if the application is running.
-    LayerStack m_LayerStack;           // Manages layers within the application.
+    std::unique_ptr<Window> m_Window;    // Application window instance.
+    ImGuiLayer* m_ImGuiLayer = nullptr;  // ImGui layer instance.
+    bool m_Running = true;               // Indicates if the application is running.
+    LayerStack m_LayerStack;             // Manages layers within the application.
 
     static Application* s_Instance;  // Pointer to the application instance (singleton).
 };
