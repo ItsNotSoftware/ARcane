@@ -63,6 +63,24 @@ class Log {
 #define ARC_ERROR(...) ::ARcane::Log::GetClientLogger()->error(__VA_ARGS__)
 #define ARC_FATAL(...) ::ARcane::Log::GetClientLogger()->critical(__VA_ARGS__)
 
+// Core assertion macro
+#define ARC_CORE_ASSERT(x, ...)                                   \
+    {                                                             \
+        if (!(x)) {                                               \
+            ARC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
+            throw std::runtime_error("Assertion Failed");         \
+        }                                                         \
+    }
+
+// Client assertion macro
+#define ARC_ASSERT(x, ...)                                   \
+    {                                                        \
+        if (!(x)) {                                          \
+            ARC_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
+            throw std::runtime_error("Assertion Failed");    \
+        }                                                    \
+    }
+
 /*
     ============================
     Example Usage:
@@ -76,6 +94,8 @@ class Log {
     ARC_WARN("This is a warning message");
     ARC_ERROR("Something went wrong: {0}", 404);
     ARC_INFO("X: {0}, Y: {1}", x, y);
+
+    ARC_ASSERT(x == y, "X must be equal to Y");
 
     ============================
 */

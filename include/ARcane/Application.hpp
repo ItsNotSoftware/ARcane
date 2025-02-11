@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ARcane/Core.hpp"
 #include "Window.hpp"
 #include "Events/Event.hpp"
 #include "Events/ApplicationEvent.hpp"
@@ -9,7 +10,7 @@
 namespace ARcane {
 
 /**
- * @class Application
+ * @class Application (Singleton)
  * @brief Manages the core runtime of the engine.
  *
  * This class is responsible for initializing and running the engine, handling events,
@@ -52,6 +53,18 @@ class Application {
      */
     void PushOverlay(Layer* overlay);
 
+    /**
+     * @brief Gets the reference to application instance.
+     * @return Reference to the application instance.
+     */
+    inline static Application& Get() { return *s_Instance; }
+
+    /**
+     * @brief Gets the reference application window.
+     * @return Reference to the application window.
+     */
+    inline Window& GetWindow() { return *m_Window; }
+
    private:
     /**
      * @brief Handles window close events.
@@ -63,6 +76,8 @@ class Application {
     std::unique_ptr<Window> m_Window;  // Application window instance.
     bool m_Running = true;             // Indicates if the application is running.
     LayerStack m_LayerStack;           // Manages layers within the application.
+
+    static Application* s_Instance;  // Pointer to the application instance (singleton).
 };
 
 /**
