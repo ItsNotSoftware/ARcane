@@ -68,7 +68,7 @@ class Log {
     {                                                             \
         if (!(x)) {                                               \
             ARC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
-            throw std::runtime_error("Assertion Failed");         \
+            std::terminate();                                     \
         }                                                         \
     }
 
@@ -77,7 +77,7 @@ class Log {
     {                                                        \
         if (!(x)) {                                          \
             ARC_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
-            throw std::runtime_error("Assertion Failed");    \
+            std::terminate();                                \
         }                                                    \
     }
 
