@@ -11,6 +11,7 @@
 #include "ARcane/Layers/Layer.hpp"
 #include "ARcane/Layers/ImGuiLayer.hpp"
 #include "ARcane/Renderer/Shader.hpp"
+#include "ARcane/Renderer/Buffer.hpp"
 
 namespace ARcane {
 
@@ -82,8 +83,10 @@ class Application {
     ImGuiLayer* m_ImGuiLayer = nullptr;  // ImGui layer instance.
     bool m_Running = true;               // Indicates if the application is running.
     LayerStack m_LayerStack;             // Manages layers within the application.
-    unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;  // Vertex array and buffer objects.
-    std::unique_ptr<Shader> m_Shader;                           // Shader instance.
+    unsigned int m_VertexArray;
+    std::unique_ptr<IndexBuffer> m_IndexBuffer;    // Index buffer instance.
+    std::unique_ptr<Shader> m_Shader;              // Shader instance.
+    std::unique_ptr<VertexBuffer> m_VertexBuffer;  // Shader instance.
 
     static Application* s_Instance;  // Pointer to the application instance (singleton).
 };
