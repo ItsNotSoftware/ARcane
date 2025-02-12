@@ -20,9 +20,6 @@ class ImGuiLayer : public Layer {
 
     void Begin();
     void End();
-
-   private:
-    float m_Time = 0.0f;  // Time of the last frame
 };
 
 }  // namespace ARcane
