@@ -25,13 +25,6 @@ Window::Window(uint32_t width, uint32_t height, const char* title)
     m_Context = new GraphicsContext(m_Window);
     m_Context->Init();  //? Maybe move to constructor?
 
-    // Log openGL info
-    ARC_CORE_INFO("OpenGL Info:");
-    ARC_CORE_INFO("\tVendor: {0}", (const char*)glGetString(GL_VENDOR));
-    ARC_CORE_INFO("\tRenderer: {0}", (const char*)glGetString(GL_RENDERER));
-    ARC_CORE_INFO("\tVersion: {0}", (const char*)glGetString(GL_VERSION));
-    std::cout << std::endl;
-
     glfwSetWindowUserPointer(m_Window, &m_UserStruct);  // Set window user pointer
     SetEventCallbacks();
 }
