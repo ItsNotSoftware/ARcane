@@ -6,30 +6,10 @@ namespace ARcane {
 
 Application* Application::s_Instance = nullptr;
 
-static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
-    switch (type) {
-        case ShaderDataType::Float:
-        case ShaderDataType::Float2:
-        case ShaderDataType::Float3:
-        case ShaderDataType::Float4:
-        case ShaderDataType::Mat3:
-        case ShaderDataType::Mat4:
-            return GL_FLOAT;
-        case ShaderDataType::Int:
-        case ShaderDataType::Int2:
-        case ShaderDataType::Int3:
-        case ShaderDataType::Int4:
-            return GL_INT;
-        case ShaderDataType::Bool:
-            return GL_BOOL;
-        default:
-            ARC_CORE_ASSERT(false, "Unknown ShaderDataType!");
-            return 0;
-    }
-}
-
 Application::Application() {
-    ARC_CORE_ASSERT(!s_Instance, "Application already exists!");
+    ARC_CORE_ASSERT(
+        !s_Instance,
+        "Creating multiple Application instances is not allowed. Use Application::Get() instead.");
     s_Instance = this;
 
     // Create the application window
@@ -42,38 +22,48 @@ Application::Application() {
     m_ImGuiLayer = new ImGuiLayer;
     PushOverlay(m_ImGuiLayer);
 
-    // Initialize OpenGL vertex array and buffer
-    glGenVertexArrays(1, &m_VertexArray);
-    glBindVertexArray(m_VertexArray);
+    m_VertexArray = std::make_shared<VertexArray>();
 
     // Define vertices for a triangle
     float verticies[] = {
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,  //
-        0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,  //
-        0.0f,  0.5f,  0.0f, 1.0f, 1.0f, 1.0f, 0.0f,  //
+        -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.2f, 1.0f,  //
+        0.5f,  -0.5f, 0.0f, 0.2f, 0.8f, 0.2f, 1.0f,  //
+        0.0f,  0.5f,  0.0f, 0.2f, 0.2f, 0.8f, 0.0f,  //
     };
-    m_VertexBuffer = std::make_unique<VertexBuffer>(verticies, sizeof(verticies));
+    auto m_VertexBuffer = std::make_shared<VertexBuffer>(verticies, sizeof(verticies));
 
-    {
-        BufferLayout layout = {
-            {ShaderDataType::Float3, "a_Position"},
-            {ShaderDataType::Float4, "a_Color"},
-        };
-        m_VertexBuffer->SetLayout(layout);
-    }
-
-    uint32_t index = 0;
-    for (const auto& element : m_VertexBuffer->GetLayout()) {
-        glEnableVertexAttribArray(index);
-        glVertexAttribPointer(index, element.GetComponentCount(),
-                              ShaderDataTypeToOpenGLBaseType(element.Type),
-                              element.Normalized ? GL_TRUE : GL_FALSE,
-                              m_VertexBuffer->GetLayout().GetStride(), (const void*)element.Offset);
-        index++;
-    }
+    BufferLayout layout = {
+        {ShaderDataType::Float3, "a_Position"},
+        {ShaderDataType::Float4, "a_Color"},
+    };
+    m_VertexBuffer->SetLayout(layout);
+    m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
     uint32_t indices[3] = {0, 1, 2};
-    m_IndexBuffer = std::make_unique<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
+    auto indexBuffer = std::make_shared<IndexBuffer>(indices, sizeof(indices) / sizeof(uint32_t));
+    m_VertexArray->SetIndexBuffer(indexBuffer);
+
+    float squareVerticies[] = {
+        -0.75f, -0.75f, 0.0f,  //
+        0.75f,  -0.75f, 0.0f,  //
+        0.75f,  0.75f,  0.0f,  //
+        -0.75f, 0.75f,  0.0f,  //
+    };
+
+    m_SquareVA = std::make_shared<VertexArray>();
+    std::shared_ptr<VertexBuffer> squareVB =
+        std::make_shared<VertexBuffer>(squareVerticies, sizeof(squareVerticies));
+
+    BufferLayout squareLayout = {
+        {ShaderDataType::Float3, "a_Position"},
+    };
+    squareVB->SetLayout(squareLayout);
+    m_SquareVA->AddVertexBuffer(squareVB);
+
+    uint32_t squareIndices[6] = {0, 1, 2, 2, 3, 0};
+    std::shared_ptr<IndexBuffer> squareIB =
+        std::make_shared<IndexBuffer>(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+    m_SquareVA->SetIndexBuffer(squareIB);
 
     std::string vertexSrc = R"(
         #version 330 core
@@ -104,7 +94,33 @@ Application::Application() {
         }
     )";
 
-    m_Shader = std::make_unique<Shader>(vertexSrc, fragmentSrc);
+    std::string blueShaderVertexSrc = R"(
+        #version 330 core
+
+        layout(location = 0) in vec3 a_Position;
+
+        out vec3 v_Position;
+
+        void main() {
+            v_Position = a_Position;
+            gl_Position = vec4(a_Position, 1.0);
+        }
+    )";
+
+    std::string blueFragmentVertexSrc = R"(
+        #version 330 core
+
+        layout(location = 0) out vec4 color;
+
+        in vec3 v_Position;
+
+        void main() {
+            color = vec4(0.04, 0.04, 0.2, 1.0); 
+        }
+    )";
+
+    m_Shader = std::make_shared<Shader>(vertexSrc, fragmentSrc);
+    m_BlueShader = std::make_shared<Shader>(blueShaderVertexSrc, blueFragmentVertexSrc);
 }
 
 Application::~Application() {}
@@ -139,9 +155,15 @@ void Application::Run() {
         glClearColor(0.1f, 0.1f, 0.1f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        m_BlueShader->Bind();
+        m_SquareVA->Bind();
+        glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
+                       nullptr);
+
         m_Shader->Bind();
-        glBindVertexArray(m_VertexArray);
-        glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+        m_VertexArray->Bind();
+        glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
+                       nullptr);
 
         // Update all active layers
         for (auto layer : m_LayerStack) {

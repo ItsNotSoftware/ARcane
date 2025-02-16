@@ -4,6 +4,28 @@
 
 namespace ARcane {
 
+unsigned int ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
+    switch (type) {
+        case ShaderDataType::Float:
+        case ShaderDataType::Float2:
+        case ShaderDataType::Float3:
+        case ShaderDataType::Float4:
+        case ShaderDataType::Mat3:
+        case ShaderDataType::Mat4:
+            return GL_FLOAT;
+        case ShaderDataType::Int:
+        case ShaderDataType::Int2:
+        case ShaderDataType::Int3:
+        case ShaderDataType::Int4:
+            return GL_INT;
+        case ShaderDataType::Bool:
+            return GL_BOOL;
+        default:
+            ARC_CORE_ASSERT(false, "Unknown ShaderDataType!");
+            return 0;
+    }
+}
+
 uint32_t ShaderDataTypeSize(ShaderDataType type) {
     switch (type) {
         case ShaderDataType::Float:
