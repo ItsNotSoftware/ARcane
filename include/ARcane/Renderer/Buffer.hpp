@@ -23,6 +23,8 @@ enum class ShaderDataType {
     Bool   // Boolean type.
 };
 
+unsigned int ShaderDataTypeToOpenGLBaseType(ShaderDataType type);
+
 /**
  * @class BufferElement
  * @brief Represents an element within a buffer.
