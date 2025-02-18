@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Window.hpp"
+#include "ARcane/Window.hpp"
 #include "ARcane/Core.hpp"
 #include "ARcane/Window.hpp"
 #include "ARcane/Input.hpp"
@@ -13,6 +13,8 @@
 #include "ARcane/Renderer/Shader.hpp"
 #include "ARcane/Renderer/Buffer.hpp"
 #include "ARcane/Renderer/VertexArray.hpp"
+#include "ARcane/Renderer/Renderer.hpp"
+#include "ARcane/Renderer/OrtographicCamera.hpp"
 
 namespace ARcane {
 
@@ -90,6 +92,7 @@ class Application {
     //! Remove this later
     std::shared_ptr<Shader> m_BlueShader;
     std::shared_ptr<VertexArray> m_SquareVA;
+    OrtographicCamera m_Camera;
 
     std::unique_ptr<Window> m_Window;  // Application window instance.
 
