@@ -106,9 +106,12 @@ class EventDispatcher {
     EventDispatcher(Event& event) : m_Event(event) {}
 
     /**
-     * @brief Dispatches an event to a matching handler function.
+     * @brief Dispatches an event to a handler function if the event type matches.
      * @tparam T The event type.
-     * @param func The function to call if the event type matches.
+     * @param func The handler function to call if the event type matches.
+     * The function should return true for consuming the event, false otherwise.
+     * Consumed events will not be passed to deeper layers.
+     *
      * @return True if the event was dispatched, false otherwise.
      */
     template <typename T>

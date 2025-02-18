@@ -2,6 +2,7 @@
 
 #include "ARcane/Core.hpp"
 #include "ARcane/Events/Event.hpp"
+#include "ARcane/Timestep.hpp"
 
 namespace ARcane {
 
@@ -47,7 +48,7 @@ class Layer {
      *
      * This method can be overridden by derived classes to perform actions during the update phase.
      */
-    virtual void OnUpdate() {}
+    virtual void OnUpdate(Timestep) {}
 
     /**
      * @brief Called when an event is received.
