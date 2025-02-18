@@ -1,20 +1,12 @@
 #pragma once
 
 #include "ARcane/Window.hpp"
-#include "ARcane/Core.hpp"
-#include "ARcane/Window.hpp"
-#include "ARcane/Input.hpp"
+#include "ARcane/Layers/LayerStack.hpp"
 #include "ARcane/Events/Event.hpp"
 #include "ARcane/Events/ApplicationEvent.hpp"
-#include "ARcane/Events/KeyEvent.hpp"
-#include "ARcane/Layers/LayerStack.hpp"
-#include "ARcane/Layers/Layer.hpp"
 #include "ARcane/Layers/ImGuiLayer.hpp"
-#include "ARcane/Renderer/Shader.hpp"
-#include "ARcane/Renderer/Buffer.hpp"
-#include "ARcane/Renderer/VertexArray.hpp"
-#include "ARcane/Renderer/Renderer.hpp"
-#include "ARcane/Renderer/OrtographicCamera.hpp"
+#include "ARcane/Core.hpp"
+#include "ARcane/Timestep.hpp"
 
 namespace ARcane {
 
@@ -85,16 +77,8 @@ class Application {
     bool m_Running = true;               // Indicates if the application is running.
     ImGuiLayer* m_ImGuiLayer = nullptr;  // ImGui layer instance.
     LayerStack m_LayerStack;             // Manages layers within the application.
-
-    std::shared_ptr<Shader> m_Shader;  // Shader instance.
-    std::shared_ptr<VertexArray> m_VertexArray;
-
-    //! Remove this later
-    std::shared_ptr<Shader> m_BlueShader;
-    std::shared_ptr<VertexArray> m_SquareVA;
-    OrtographicCamera m_Camera;
-
-    std::unique_ptr<Window> m_Window;  // Application window instance.
+    std::unique_ptr<Window> m_Window;    // Application window instance.
+    float m_LastFrameTime = 0.0f;        // Time of the last frame.
 
     static Application* s_Instance;  // Pointer to the application instance (singleton).
 };

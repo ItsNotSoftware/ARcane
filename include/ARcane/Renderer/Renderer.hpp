@@ -2,7 +2,7 @@
 
 #include "ARcane/Core.hpp"
 #include "ARcane/Renderer/VertexArray.hpp"
-#include "ARcane/Renderer/OrtographicCamera.hpp"
+#include "ARcane/Renderer/OrthographicCamera.hpp"
 #include "ARcane/Renderer/Shader.hpp"
 
 #include <glm/glm.hpp>
@@ -11,7 +11,7 @@ namespace ARcane {
 
 class Renderer {
    public:
-    static void BeginScene(OrtographicCamera& camera);
+    static void BeginScene(OrthographicCamera& camera);
     static void Submit(const std::shared_ptr<Shader>& shader,
                        const std::shared_ptr<VertexArray>& vertexArray);
     static void EndScene();

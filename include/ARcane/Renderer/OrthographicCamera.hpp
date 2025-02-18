@@ -7,9 +7,9 @@
 
 namespace ARcane {
 
-class OrtographicCamera {
+class OrthographicCamera {
    public:
-    OrtographicCamera(float left, float right, float bottom, float top);
+    OrthographicCamera(float left, float right, float bottom, float top);
 
     inline void SetPosition(const glm::vec3& position) {
         m_Position = position;
