@@ -58,7 +58,6 @@ target_include_directories(ARcane PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../glad/include
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui # For core ImGui headers (e.g., imgui.h)
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends # For backend headers (e.g., imgui_impl_glfw.h)
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/stb # For stb_image.h
 )
 
 # Link with other libraries

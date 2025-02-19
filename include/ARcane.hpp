@@ -10,6 +10,7 @@
 #include "ARcane/Renderer/Buffer.hpp"
 #include "ARcane/Renderer/VertexArray.hpp"
 #include "ARcane/Renderer/OrthographicCamera.hpp"
+#include "ARcane/Renderer/Texture.hpp"
 #include "ARcane/Timestep.hpp"
 
 // ---Entry Point---
