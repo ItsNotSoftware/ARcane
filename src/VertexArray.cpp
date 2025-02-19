@@ -11,7 +11,7 @@ void VertexArray::Bind() { glBindVertexArray(m_RendererID); }
 
 void VertexArray::Unbind() { glBindVertexArray(0); }
 
-void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) {
+void VertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) {
     // Check if the vertex buffer has a layout (size > 0)
     ARC_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 
@@ -38,7 +38,7 @@ void VertexArray::AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuf
     m_VertexBuffers.push_back(vertexBuffer);
 }
 
-void VertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) {
+void VertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) {
     ARC_CORE_ASSERT(indexBuffer->GetCount(), "Index Buffer has no indices!");
 
     // Bind the vertex array and the index buffer

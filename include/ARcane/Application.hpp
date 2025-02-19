@@ -77,7 +77,7 @@ class Application {
     bool m_Running = true;               // Indicates if the application is running.
     ImGuiLayer* m_ImGuiLayer = nullptr;  // ImGui layer instance.
     LayerStack m_LayerStack;             // Manages layers within the application.
-    std::unique_ptr<Window> m_Window;    // Application window instance.
+    Scope<Window> m_Window;              // Application window instance.
     float m_LastFrameTime = 0.0f;        // Time of the last frame.
 
     static Application* s_Instance;  // Pointer to the application instance (singleton).

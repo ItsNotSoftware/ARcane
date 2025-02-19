@@ -1,9 +1,15 @@
 #include "ARcane.hpp"
 #include "imgui.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class ExampleLayer : public ARcane::Layer {
    public:
-    ExampleLayer() : Layer("Example"), m_Camera(-1.6f, 1.6f, -1.2f, 1.2f), m_CameraPosition(0.0f) {
+    ExampleLayer()
+        : Layer("Example"),
+          m_Camera(-1.6f, 1.6f, -1.2f, 1.2f),
+          m_CameraPosition(0.0f),
+          m_SquarePosition(0.0f) {
         m_VertexArray = std::make_shared<ARcane::VertexArray>();
 
         // Define vertices for a triangle
@@ -27,10 +33,10 @@ class ExampleLayer : public ARcane::Layer {
         m_VertexArray->SetIndexBuffer(indexBuffer);
 
         float squareVerticies[] = {
-            -0.75f, -0.75f, 0.0f,  //
-            0.75f,  -0.75f, 0.0f,  //
-            0.75f,  0.75f,  0.0f,  //
-            -0.75f, 0.75f,  0.0f,  //
+            -0.5f, -0.5f, 0.0f,  //
+            0.5f,  -0.5f, 0.0f,  //
+            0.5f,  0.5f,  0.0f,  //
+            -0.5f, 0.5f,  0.0f,  //
         };
 
         m_SquareVA = std::make_shared<ARcane::VertexArray>();
@@ -55,6 +61,7 @@ class ExampleLayer : public ARcane::Layer {
         layout(location = 1) in vec4 a_Color;
 
         uniform mat4 u_ViewProjection;
+        uniform mat4 u_Transform;
 
         out vec3 v_Position;
         out vec4 v_Color;
@@ -62,7 +69,7 @@ class ExampleLayer : public ARcane::Layer {
         void main() {
             v_Position = a_Position;
             v_Color = a_Color;
-            gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+            gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
         }
     )";
 
@@ -79,35 +86,39 @@ class ExampleLayer : public ARcane::Layer {
         }
     )";
 
-        std::string blueShaderVertexSrc = R"(
+        std::string flatColorShaderVertexSrc = R"(
         #version 330 core
 
         layout(location = 0) in vec3 a_Position;
 
         uniform mat4 u_ViewProjection;
+        uniform mat4 u_Transform;
 
         out vec3 v_Position;
 
         void main() {
             v_Position = a_Position;
-            gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+            gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
         }
     )";
 
-        std::string blueFragmentVertexSrc = R"(
+        std::string flatColorFragmentVertexSrc = R"(
         #version 330 core
 
         layout(location = 0) out vec4 color;
 
         in vec3 v_Position;
 
+        uniform vec4 u_Color;
+
         void main() {
-            color = vec4(0.04, 0.04, 0.2, 1.0); 
+            color = u_Color; 
         }
     )";
 
         m_Shader = std::make_shared<ARcane::Shader>(vertexSrc, fragmentSrc);
-        m_BlueShader = std::make_shared<ARcane::Shader>(blueShaderVertexSrc, blueFragmentVertexSrc);
+        m_flatColorShader =
+            std::make_shared<ARcane::Shader>(flatColorShaderVertexSrc, flatColorFragmentVertexSrc);
     }
     ~ExampleLayer() {}
 
@@ -126,6 +137,16 @@ class ExampleLayer : public ARcane::Layer {
             m_CameraRotation -= m_CameraRotationSpeed * ts;
         }
 
+        if (ARcane::Input::IsKeyPressed(ARcane::Key::J)) {
+            m_SquarePosition.x -= m_SquareMoveSpeed * ts;
+        } else if (ARcane::Input::IsKeyPressed(ARcane::Key::L)) {
+            m_SquarePosition.x += m_SquareMoveSpeed * ts;
+        } else if (ARcane::Input::IsKeyPressed(ARcane::Key::I)) {
+            m_SquarePosition.y += m_SquareMoveSpeed * ts;
+        } else if (ARcane::Input::IsKeyPressed(ARcane::Key::K)) {
+            m_SquarePosition.y -= m_SquareMoveSpeed * ts;
+        }
+
         ARcane::Renderer::SetClearColor({0.1f, 0.1f, 0.1f, 1});
         ARcane::Renderer::Clear();
 
@@ -134,13 +155,29 @@ class ExampleLayer : public ARcane::Layer {
 
         ARcane::Renderer::BeginScene(m_Camera);
 
-        ARcane::Renderer::Submit(m_BlueShader, m_SquareVA);
-        ARcane::Renderer::Submit(m_Shader, m_VertexArray);
+        glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+        glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
+        glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.0f);
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
+                glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
+
+                m_flatColorShader->UploadUniformVec4("u_Color", m_SquareColor);
+
+                ARcane::Renderer::Submit(m_flatColorShader, m_SquareVA, transform);
+            }
+        }
 
         ARcane::Renderer::EndScene();
     }
 
-    void OnImGuiRender() override {}
+    void OnImGuiRender() override {
+        ImGui::Begin("Settings");
+        ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+        ImGui::End();
+    }
 
     void OnEvent(ARcane::Event& event) override {}
 
@@ -148,14 +185,20 @@ class ExampleLayer : public ARcane::Layer {
     std::shared_ptr<ARcane::Shader> m_Shader;  // Shader instance.
     std::shared_ptr<ARcane::VertexArray> m_VertexArray;
 
-    std::shared_ptr<ARcane::Shader> m_BlueShader;
+    std::shared_ptr<ARcane::Shader> m_flatColorShader;
     std::shared_ptr<ARcane::VertexArray> m_SquareVA;
 
     ARcane::OrthographicCamera m_Camera;
+
     glm::vec3 m_CameraPosition;
     float m_CameraMoveSpeed = 5.0f;
+    float m_SquareMoveSpeed = 1.0f;
+
     float m_CameraRotation = 0.0f;
     float m_CameraRotationSpeed = 180.0f;
+
+    glm::vec3 m_SquarePosition;
+    glm::vec4 m_SquareColor = {0.2f, 0.3f, 0.8f, 1.0f};
 };
 
 class Sandbox : public ARcane::Application {
