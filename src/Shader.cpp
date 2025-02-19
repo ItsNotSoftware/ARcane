@@ -120,17 +120,17 @@ void Shader::UploadUniformFloat(const std::string &name, float value) {
     glUniform1f(location, value);
 }
 
-void Shader::UploadUniformVec2(const std::string &name, const glm::vec2 &vector) {
+void Shader::UploadUniformFloat2(const std::string &name, const glm::vec2 &vector) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform2f(location, vector.x, vector.y);
 }
 
-void Shader::UploadUniformVec3(const std::string &name, const glm::vec3 &vector) {
+void Shader::UploadUniformFloat3(const std::string &name, const glm::vec3 &vector) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform3f(location, vector.x, vector.y, vector.z);
 }
 
-void Shader::UploadUniformVec4(const std::string &name, const glm::vec4 &vector) {
+void Shader::UploadUniformFloat4(const std::string &name, const glm::vec4 &vector) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform4f(location, vector.r, vector.g, vector.b, vector.a);
 }

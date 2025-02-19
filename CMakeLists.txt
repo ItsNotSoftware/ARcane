@@ -4,7 +4,7 @@ project(ARcane LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 
 
 # Submodule initialization check
@@ -58,6 +58,7 @@ target_include_directories(ARcane PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../glad/include
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui # For core ImGui headers (e.g., imgui.h)
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends # For backend headers (e.g., imgui_impl_glfw.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/stb # For stb_image.h
 )
 
 # Link with other libraries
