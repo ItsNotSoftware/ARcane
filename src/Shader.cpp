@@ -3,6 +3,8 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <unistd.h>
+
 namespace ARcane {
 
 static GLenum ShaderTypeFromString(const std::string &type) {
@@ -27,8 +29,15 @@ Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) {
 }
 
 Shader::~Shader() { glDeleteProgram(m_RendererID); }
-
 std::string Shader::ReadFile(const std::string &filepath) {
+    // print cwd
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        ARC_CORE_TRACE("Current working dir: {0}", cwd);
+    } else {
+        ARC_CORE_ERROR("getcwd() error");
+    }
+
     std::string result;
     std::ifstream in(filepath, std::ios::in | std::ios::binary);
 

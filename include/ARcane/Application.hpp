@@ -8,6 +8,7 @@
 #include "ARcane/Core.hpp"
 #include "ARcane/Timestep.hpp"
 #include "ARcane/Renderer/Renderer.hpp"
+#include "ARcane/Renderer/Renderer2D.hpp"
 
 namespace ARcane {
 

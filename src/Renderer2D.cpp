@@ -14,7 +14,7 @@ static Renderer2DStorage* s_Data;
 
 void Renderer2D::Init() {
     s_Data = new Renderer2DStorage();
-    s_Data->QuadVertexArray = std::make_unique<VertexArray>();
+    s_Data->QuadVertexArray = std::make_shared<VertexArray>();
 
     float vertices[4 * 5] = {
         -0.5f, -0.5f, 0.0f,  //
@@ -36,7 +36,7 @@ void Renderer2D::Init() {
 
     s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
 
-    s_Data->FlatColorShader = std::make_unique<Shader>("../assets/shaders/FlatColor.glsl");
+    s_Data->FlatColorShader = std::make_shared<Shader>("../assets/shaders/FlatColor.glsl");
 }
 
 void Renderer2D::Shutdown() { delete s_Data; }

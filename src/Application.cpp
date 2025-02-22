@@ -19,6 +19,7 @@ Application::Application() {
     m_Window->SetEventCallback(ARC_BIND_EVENT_FN(Application::OnEvent));
 
     Renderer::Init();
+    Renderer2D::Init();
 
     // Initialize ImGui
     m_ImGuiLayer = new ImGuiLayer;
