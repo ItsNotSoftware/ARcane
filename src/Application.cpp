@@ -18,6 +18,8 @@ Application::Application() {
     // Bind event handling to this application instance
     m_Window->SetEventCallback(ARC_BIND_EVENT_FN(Application::OnEvent));
 
+    Renderer::Init();
+
     // Initialize ImGui
     m_ImGuiLayer = new ImGuiLayer;
     PushOverlay(m_ImGuiLayer);
@@ -40,6 +42,7 @@ void Application::OnEvent(Event& e) {
 
     // Handle window close events
     dispatcher.Dispatch<WindowCloseEvent>(ARC_BIND_EVENT_FN(Application::OnWindowClose));
+    dispatcher.Dispatch<WindowResizeEvent>(ARC_BIND_EVENT_FN(Application::OnWindowResize));
 
     // Pass the event to layers from top to bottom
     for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
@@ -56,9 +59,11 @@ void Application::Run() {
         Timestep timestep = time - m_LastFrameTime;
         m_LastFrameTime = time;
 
-        // Update all active layers
-        for (auto layer : m_LayerStack) {
-            layer->OnUpdate(timestep);
+        // Update all active layers if the application is not minimized
+        if (!m_Minimized) {
+            for (auto layer : m_LayerStack) {
+                layer->OnUpdate(timestep);
+            }
         }
 
         // Render ImGui elements
@@ -75,6 +80,17 @@ void Application::Run() {
 bool Application::OnWindowClose(WindowCloseEvent&) {
     m_Running = false;  // Stop the application loop
     return true;
+}
+
+bool Application::OnWindowResize(WindowResizeEvent& e) {
+    // Window minimization
+    if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+        m_Minimized = true;
+    }
+    m_Minimized = false;
+
+    Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+    return false;
 }
 
 }  // namespace ARcane

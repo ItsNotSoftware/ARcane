@@ -6,6 +6,13 @@ namespace ARcane {
 
 Renderer::SceneData* Renderer::s_SceneData = new Renderer::SceneData;
 
+void Renderer::OnWindowResize(uint32_t width, uint32_t height) { glViewport(0, 0, width, height); }
+
+void Renderer::Init() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void Renderer::BeginScene(OrthographicCamera& camera) {
     s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 }

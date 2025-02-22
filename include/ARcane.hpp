@@ -6,13 +6,11 @@
 #include "ARcane/Layers/Layer.hpp"
 #include "ARcane/Layers/ImGuiLayer.hpp"
 #include "ARcane/Renderer/Renderer.hpp"
+#include "ARcane/Renderer/Renderer2D.hpp"
 #include "ARcane/Renderer/Shader.hpp"
 #include "ARcane/Renderer/Buffer.hpp"
 #include "ARcane/Renderer/VertexArray.hpp"
 #include "ARcane/Renderer/OrthographicCamera.hpp"
+#include "ARcane/Renderer/OrthographicCameraController.hpp"
 #include "ARcane/Renderer/Texture.hpp"
 #include "ARcane/Timestep.hpp"
-
-// ---Entry Point---
-#include "ARcane/EntryPoint.hpp"
-// ------------------

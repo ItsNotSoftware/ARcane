@@ -64,21 +64,21 @@ class Log {
 #define ARC_FATAL(...) ::ARcane::Log::GetClientLogger()->critical(__VA_ARGS__)
 
 // Core assertion macro
-#define ARC_CORE_ASSERT(x, ...)                                   \
-    {                                                             \
-        if (!(x)) {                                               \
-            ARC_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
-            std::terminate();                                     \
-        }                                                         \
+#define ARC_CORE_ASSERT(x, ...)                                    \
+    {                                                              \
+        if (!(x)) {                                                \
+            ARC_CORE_ERROR("Assertion Failed - {0}", __VA_ARGS__); \
+            std::terminate();                                      \
+        }                                                          \
     }
 
 // Client assertion macro
-#define ARC_ASSERT(x, ...)                                   \
-    {                                                        \
-        if (!(x)) {                                          \
-            ARC_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
-            std::terminate();                                \
-        }                                                    \
+#define ARC_ASSERT(x, ...)                                    \
+    {                                                         \
+        if (!(x)) {                                           \
+            ARC_ERROR("Assertion Failed - {0}", __VA_ARGS__); \
+            std::terminate();                                 \
+        }                                                     \
     }
 
 /*

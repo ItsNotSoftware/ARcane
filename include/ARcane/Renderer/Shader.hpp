@@ -2,6 +2,7 @@
 
 #include "ARcane/Core.hpp"
 
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 
 namespace ARcane {
@@ -9,6 +10,7 @@ namespace ARcane {
 class Shader {
    public:
     Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
+    Shader(const std::string& filepath);
     ~Shader();
 
     void Bind() const;
@@ -25,6 +27,10 @@ class Shader {
     void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
    private:
+    std::string ReadFile(const std::string& filepath);
+    std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+    void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
+
     uint32_t m_RendererID;
 };
 

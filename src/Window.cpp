@@ -22,6 +22,9 @@ Window::Window(uint32_t width, uint32_t height, const char* title)
     m_Window = glfwCreateWindow(m_UserStruct.Width, m_UserStruct.Height, m_UserStruct.Title,
                                 nullptr, nullptr);
 
+    // Disable vsync
+    // glfwSwapInterval(0);
+
     m_Context = new GraphicsContext(m_Window);
     m_Context->Init();  //? Maybe move to constructor?
 

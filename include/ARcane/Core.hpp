@@ -8,6 +8,8 @@
 #include <functional>
 #include <cstdint>
 #include <exception>
+#include <fstream>
+#include <unordered_map>
 
 #include "ARcane/Log.hpp"
 

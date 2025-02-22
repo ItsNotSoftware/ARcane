@@ -7,6 +7,7 @@
 #include "ARcane/Layers/ImGuiLayer.hpp"
 #include "ARcane/Core.hpp"
 #include "ARcane/Timestep.hpp"
+#include "ARcane/Renderer/Renderer.hpp"
 
 namespace ARcane {
 
@@ -73,8 +74,10 @@ class Application {
      * @return True if the event is handled, false otherwise.
      */
     bool OnWindowClose(WindowCloseEvent& e);
+    bool OnWindowResize(WindowResizeEvent& e);
 
     bool m_Running = true;               // Indicates if the application is running.
+    bool m_Minimized = false;            // Indicates if the application is minimized.
     ImGuiLayer* m_ImGuiLayer = nullptr;  // ImGui layer instance.
     LayerStack m_LayerStack;             // Manages layers within the application.
     Scope<Window> m_Window;              // Application window instance.
