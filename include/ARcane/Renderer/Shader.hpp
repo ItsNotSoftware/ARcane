@@ -16,15 +16,15 @@ class Shader {
     void Bind() const;
     void Unbind() const;
 
-    void UploadUniformInt(const std::string& name, int value);
-    void UploadUniformFloat(const std::string& name, float value);
+    void SetInt(const std::string& name, int value);
+    void SetFloat(const std::string& name, float value);
 
-    void UploadUniformFloat2(const std::string& name, const glm::vec2& vector);
-    void UploadUniformFloat3(const std::string& name, const glm::vec3& vector);
-    void UploadUniformFloat4(const std::string& name, const glm::vec4& vector);
+    void SetFloat2(const std::string& name, const glm::vec2& vector);
+    void SetFloat3(const std::string& name, const glm::vec3& vector);
+    void SetFloat4(const std::string& name, const glm::vec4& vector);
 
-    void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
-    void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+    void SetMat3(const std::string& name, const glm::mat3& matrix);
+    void SetMat4(const std::string& name, const glm::mat4& matrix);
 
    private:
     std::string ReadFile(const std::string& filepath);

@@ -22,6 +22,8 @@ class Renderer {
     static void SetClearColor(const glm::vec4& color);
     static void Clear();
 
+    static void DrawIndexed(const Ref<VertexArray>& vertexArray);
+
    private:
     struct SceneData {
         glm::mat4 ViewProjectionMatrix;

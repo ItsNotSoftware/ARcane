@@ -164,7 +164,7 @@ class ExampleLayer : public ARcane::Layer {
                 glm::vec3 pos(i * 0.11f, j * 0.11f, 0.0f);
                 glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
 
-                m_flatColorShader->UploadUniformVec4("u_Color", m_SquareColor);
+                m_flatColorShader->SetVec4("u_Color", m_SquareColor);
 
                 ARcane::Renderer::Submit(m_flatColorShader, m_SquareVA, transform);
             }

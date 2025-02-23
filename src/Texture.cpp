@@ -1,9 +1,19 @@
 #include "ARcane/Renderer/Texture.hpp"
 
-#include <glad/glad.h>
 #include "stb/stb_image.h"
 
 namespace ARcane {
+
+Texture2D::Texture2D(uint32_t width, uint32_t height)
+    : m_Width(width), m_Height(height), m_InternalFormat(GL_RGBA), m_DataFormat(GL_RGBA) {
+    glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+    glTextureStorage2D(m_RendererID, 1, GL_RGBA8, m_Width, m_Height);
+    // Set texture parameters
+    glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
 
 Texture2D::Texture2D(const std::string& path) : m_Path(path) {
     int width, height, channels;
@@ -25,6 +35,9 @@ Texture2D::Texture2D(const std::string& path) : m_Path(path) {
         dataFormat = GL_RGB;       // 8 bits per channel rgb (image)
     }
 
+    m_InternalFormat = internalFormat;
+    m_DataFormat = dataFormat;
+
     ARC_CORE_ASSERT(internalFormat & dataFormat, "Image format not supported!");
 
     // Create and store texture
@@ -34,6 +47,9 @@ Texture2D::Texture2D(const std::string& path) : m_Path(path) {
     // Set texture parameters
     glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Upload image data to GPU
     glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE,
@@ -46,5 +62,10 @@ Texture2D::Texture2D(const std::string& path) : m_Path(path) {
 Texture2D::~Texture2D() { glDeleteTextures(1, &m_RendererID); }
 
 void Texture2D::Bind(uint32_t slot) const { glBindTextureUnit(slot, m_RendererID); }
+
+void Texture2D::SetData(void* data, uint32_t) {
+    glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE,
+                        data);
+}
 
 }  // namespace ARcane

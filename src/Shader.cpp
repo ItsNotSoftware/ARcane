@@ -3,8 +3,6 @@
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <unistd.h>
-
 namespace ARcane {
 
 static GLenum ShaderTypeFromString(const std::string &type) {
@@ -30,14 +28,6 @@ Shader::Shader(const std::string &vertexSrc, const std::string &fragmentSrc) {
 
 Shader::~Shader() { glDeleteProgram(m_RendererID); }
 std::string Shader::ReadFile(const std::string &filepath) {
-    // print cwd
-    char cwd[1024];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        ARC_CORE_TRACE("Current working dir: {0}", cwd);
-    } else {
-        ARC_CORE_ERROR("getcwd() error");
-    }
-
     std::string result;
     std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
@@ -159,37 +149,37 @@ void Shader::Bind() const { glUseProgram(m_RendererID); }
 
 void Shader::Unbind() const { glUseProgram(0); }
 
-void Shader::UploadUniformInt(const std::string &name, int value) {
+void Shader::SetInt(const std::string &name, int value) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform1i(location, value);
 }
 
-void Shader::UploadUniformFloat(const std::string &name, float value) {
+void Shader::SetFloat(const std::string &name, float value) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform1f(location, value);
 }
 
-void Shader::UploadUniformFloat2(const std::string &name, const glm::vec2 &vector) {
+void Shader::SetFloat2(const std::string &name, const glm::vec2 &vector) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform2f(location, vector.x, vector.y);
 }
 
-void Shader::UploadUniformFloat3(const std::string &name, const glm::vec3 &vector) {
+void Shader::SetFloat3(const std::string &name, const glm::vec3 &vector) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform3f(location, vector.x, vector.y, vector.z);
 }
 
-void Shader::UploadUniformFloat4(const std::string &name, const glm::vec4 &vector) {
+void Shader::SetFloat4(const std::string &name, const glm::vec4 &vector) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform4f(location, vector.r, vector.g, vector.b, vector.a);
 }
 
-void Shader::UploadUniformMat3(const std::string &name, const glm::mat3 &matrix) {
+void Shader::SetMat3(const std::string &name, const glm::mat3 &matrix) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::UploadUniformMat4(const std::string &name, const glm::mat4 &matrix) {
+void Shader::SetMat4(const std::string &name, const glm::mat4 &matrix) {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

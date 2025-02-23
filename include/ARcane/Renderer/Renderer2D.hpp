@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ARcane/Renderer/OrthographicCamera.hpp"
+#include "ARcane/Renderer/Texture.hpp"
 
 namespace ARcane {
 
@@ -14,6 +15,10 @@ class Renderer2D {
 
     static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
     static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
+    static void DrawQuad(const glm::vec2& position, const glm::vec2& size,
+                         const Ref<Texture2D>& texture);
+    static void DrawQuad(const glm::vec3& position, const glm::vec2& size,
+                         const Ref<Texture2D>& texture);
 };
 
 }  // namespace ARcane

@@ -13,7 +13,7 @@ Application::Application() {
     s_Instance = this;
 
     // Create the application window
-    m_Window = std::make_unique<Window>(1800, 1200, "ARcane Engine");
+    m_Window = CreateScope<Window>(1800, 1200, "ARcane Engine");
 
     // Bind event handling to this application instance
     m_Window->SetEventCallback(ARC_BIND_EVENT_FN(Application::OnEvent));
