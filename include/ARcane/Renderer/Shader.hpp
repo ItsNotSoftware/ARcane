@@ -17,6 +17,7 @@ class Shader {
     void Unbind() const;
 
     void SetInt(const std::string& name, int value);
+    void SetIntArray(const std::string& name, int* values, uint32_t count);
     void SetFloat(const std::string& name, float value);
 
     void SetFloat2(const std::string& name, const glm::vec2& vector);

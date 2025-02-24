@@ -20,12 +20,17 @@ class Texture2D : public Texture {
     Texture2D(uint32_t width, uint32_t height);
     ~Texture2D();
 
-    uint32_t GetWidth() const override { return m_Width; }
-    uint32_t GetHeight() const override { return m_Height; }
+    inline uint32_t GetWidth() const override { return m_Width; }
+    inline uint32_t GetHeight() const override { return m_Height; }
+    inline uint32_t GetRendererID() const { return m_RendererID; }
 
     void SetData(void* data, uint32_t) override;
 
     void Bind(uint32_t slot = 0) const override;
+
+    inline bool operator==(const Texture2D& other) const {
+        return m_RendererID == other.m_RendererID;
+    }
 
    private:
     std::string m_Path;
