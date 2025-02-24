@@ -35,4 +35,6 @@ constexpr Ref<T> CreateRef(Args&&... args) {
     return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
+#define ARC_ASSET_PATH(path) (std::string(ASSETS_DIR) + std::string("/") + (path))
+
 }  // namespace ARcane

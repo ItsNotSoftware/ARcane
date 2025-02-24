@@ -80,3 +80,6 @@ install(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ARcane
     DESTINATION include
 )
+
+# Define the path to the assets folder and pass it as a compile definition
+target_compile_definitions(ARcane PUBLIC ASSETS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/")

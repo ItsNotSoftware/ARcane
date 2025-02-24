@@ -79,7 +79,7 @@ void Renderer2D::Init() {
         samplers[i] = i;
     }
 
-    s_Data.TextureShader = CreateRef<Shader>("../assets/shaders/Texture.glsl");
+    s_Data.TextureShader = CreateRef<Shader>(ARC_ASSET_PATH("shaders/Texture.glsl"));
     s_Data.TextureShader->Bind();
     s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
