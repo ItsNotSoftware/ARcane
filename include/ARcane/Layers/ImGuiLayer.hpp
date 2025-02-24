@@ -16,7 +16,6 @@ class ImGuiLayer : public Layer {
     virtual void OnAttach() override;
     virtual void OnDetach() override;
     virtual void OnEvent(Event&) override;
-    virtual void OnImGuiRender() override;
 
     void Begin();
     void End();

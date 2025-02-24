@@ -37,9 +37,9 @@ void Renderer::SetClearColor(const glm::vec4& color) {
 
 void Renderer::Clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 
-void Renderer::DrawIndexed(const Ref<VertexArray>& vertexArray) {
-    glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT,
-                   nullptr);
+void Renderer::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount) {
+    uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 }
 
 };  // namespace ARcane

@@ -107,6 +107,13 @@ class BufferLayout {
 class VertexBuffer {
    public:
     /**
+     * @brief Constructs an empty VertexBuffer.
+     *
+     * @param size Size of the buffer in bytes.
+     */
+    VertexBuffer(uint32_t size);
+
+    /**
      * @brief Constructs a VertexBuffer and uploads data to GPU.
      *
      * @param vertices Pointer to vertex data.
@@ -141,6 +148,8 @@ class VertexBuffer {
      * @return The BufferLayout of the VertexBuffer.
      */
     inline const BufferLayout& GetLayout() const { return m_Layout; }
+
+    void SetData(const void* data, uint32_t size);
 
    private:
     uint32_t m_RendererID = 0;   // Renderer-specific buffer ID.
