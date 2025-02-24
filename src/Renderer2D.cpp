@@ -15,10 +15,10 @@ struct QuadVertex {
 };
 
 struct Renderer2DData {
-    const uint32_t MaxQuads = 10'000;
-    const uint32_t MaxVertices = MaxQuads * 4;
-    const uint32_t MaxIndices = MaxQuads * 6;
-    static const uint32_t MaxTextureSlots = 32;  // TODO: RenderCaps
+    inline static const uint32_t MaxQuads = 10'000;
+    inline static const uint32_t MaxVertices = MaxQuads * 4;
+    inline static const uint32_t MaxIndices = MaxQuads * 6;
+    inline static const uint32_t MaxTextureSlots = 32;  // TODO: RenderCaps
 
     Ref<VertexArray> QuadVertexArray;
     Ref<VertexBuffer> QuadVertexBuffer;
@@ -33,6 +33,8 @@ struct Renderer2DData {
     uint32_t TextureSlotIndex = 1;  // 0 = white texture
 
     glm::vec4 QuadVertexPositions[4];
+
+    Renderer2D::Statistics Stats;
 };
 
 static Renderer2DData s_Data;
@@ -52,9 +54,9 @@ void Renderer2D::Init() {
 
     s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 
-    uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
+    uint32_t* quadIndices = new uint32_t[Renderer2DData::MaxIndices];
 
-    for (uint32_t i = 0, offset = 0; i < s_Data.MaxIndices; i += 6, offset += 4) {
+    for (uint32_t i = 0, offset = 0; i < Renderer2DData::MaxIndices; i += 6, offset += 4) {
         quadIndices[i + 0] = offset + 0;
         quadIndices[i + 1] = offset + 1;
         quadIndices[i + 2] = offset + 2;
@@ -63,7 +65,7 @@ void Renderer2D::Init() {
         quadIndices[i + 5] = offset + 0;
     }
 
-    Ref<IndexBuffer> quadIB = CreateRef<IndexBuffer>(quadIndices, s_Data.MaxIndices);
+    Ref<IndexBuffer> quadIB = CreateRef<IndexBuffer>(quadIndices, Renderer2DData::MaxIndices);
     s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
     delete[] quadIndices;
 
@@ -116,6 +118,16 @@ void Renderer2D::Flush() {
     }
 
     Renderer::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+    s_Data.Stats.DrawCalls++;
+}
+
+void Renderer2D::FlushAndReset() {
+    EndScene();
+
+    s_Data.QuadIndexCount = 0;
+    s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+    s_Data.TextureSlotIndex = 1;
 }
 
 void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size,
@@ -131,6 +143,11 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size,
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
                           const glm::vec4& color) {
+    // Check if we need to flush the current batch (if full) and start a new one
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        FlushAndReset();
+    }
+
     const float textureIndex = 0.0f;
     const float tilingFactor = 1.0f;
     const float rotation = 0.0f;
@@ -168,11 +185,18 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.Stats.QuadCount++;
 }
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
                           const Ref<Texture2D>& texture, float tilingFactor,
                           const glm::vec4 tintColor) {
+    // Check if we need to flush the current batch (if full) and start a new one
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        FlushAndReset();
+    }
+
     float textureIndex = 0.0f;
     const float rotation = 0.0f;
     constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -225,6 +249,8 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.Stats.QuadCount++;
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -234,6 +260,11 @@ void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& siz
 
 void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
                                  const glm::vec4& color) {
+    // Check if we need to flush the current batch (if full) and start a new one
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        FlushAndReset();
+    }
+
     float textureIndex = 0.0f;
     float tilingFactor = 1.0f;
 
@@ -270,6 +301,8 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& siz
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.Stats.QuadCount++;
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -282,6 +315,11 @@ void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& siz
 void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
                                  const Ref<Texture2D>& texture, float tilingFactor,
                                  const glm::vec4& tintColor) {
+    // Check if we need to flush the current batch (if full) and start a new one
+    if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+        FlushAndReset();
+    }
+
     constexpr glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
     float textureIndex = 0.0f;
 
@@ -333,6 +371,12 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& siz
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+
+    s_Data.Stats.QuadCount++;
 }
+
+void Renderer2D::ResetStats() { memset(&s_Data.Stats, 0, sizeof(Statistics)); }
+
+Renderer2D::Statistics Renderer2D::GetStats() { return s_Data.Stats; }
 
 }  // namespace ARcane
