@@ -35,6 +35,10 @@ constexpr Ref<T> CreateRef(Args&&... args) {
     return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
+#ifndef ASSETS_DIR
+#define ASSETS_DIR "[CMAKE FAILED TO SET ASSETS_DIR]"
+#endif
+
 #define ARC_ASSET_PATH(path) (std::string(ASSETS_DIR) + std::string("/") + (path))
 
 }  // namespace ARcane

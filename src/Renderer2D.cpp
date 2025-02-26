@@ -190,8 +190,7 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
 }
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
-                          const Ref<Texture2D>& texture, float tilingFactor,
-                          const glm::vec4 tintColor) {
+                          const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4) {
     // Check if we need to flush the current batch (if full) and start a new one
     if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
         FlushAndReset();
@@ -314,7 +313,7 @@ void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& siz
 
 void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation,
                                  const Ref<Texture2D>& texture, float tilingFactor,
-                                 const glm::vec4& tintColor) {
+                                 const glm::vec4&) {
     // Check if we need to flush the current batch (if full) and start a new one
     if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
         FlushAndReset();
