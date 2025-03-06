@@ -17,8 +17,8 @@ add_subdirectory(external/glfw)
 add_subdirectory(external/glm)
 
 find_package(OpenGL REQUIRED)
+find_package(OpenCV REQUIRED)
 
-# Gather your own project sources (e.g. your code and glad.c)
 file(GLOB ARCANE_SOURCES "src/*.cpp" "src/*.c")
 
 # Define your main target (library or executable)
@@ -51,13 +51,13 @@ target_sources(ARcane PRIVATE
     ${IMGUI_STDLIB_SOURCES}
 )
 
-# Set up include directories so that your code can find headers.
 target_include_directories(ARcane PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../glad/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../stb
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui # For core ImGui headers (e.g., imgui.h)
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends # For backend headers (e.g., imgui_impl_glfw.h)
+    ${OpenCV_INCLUDE_DIRS} # Add this line to include OpenCV headers
 )
 
 # Link with other libraries
@@ -66,6 +66,7 @@ target_link_libraries(ARcane PUBLIC
     glm
     OpenGL::GL
     spdlog::spdlog
+    ${OpenCV_LIBS}
 )
 
 set_target_properties(ARcane PROPERTIES VERSION 1.0 SOVERSION 1)
