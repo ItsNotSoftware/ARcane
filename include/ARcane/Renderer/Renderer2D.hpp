@@ -2,6 +2,7 @@
 
 #include "ARcane/Renderer/OrthographicCamera.hpp"
 #include "ARcane/Renderer/Texture.hpp"
+#include <opencv2/opencv.hpp>
 
 namespace ARcane {
 
@@ -13,6 +14,8 @@ class Renderer2D {
     static void BeginScene(const OrthographicCamera& camera);
     static void EndScene();
     static void Flush();
+
+    static void DrawCVMat(const cv::Mat& frame, const glm::vec3& position, const glm::vec2& size);
 
     static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
     static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);

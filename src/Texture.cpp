@@ -21,7 +21,7 @@ Texture2D::Texture2D(const std::string& path) : m_Path(path) {
 
     // Load image
     stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-    ARC_CORE_ASSERT(data, "Failed to load image!");
+    ARC_CORE_ASSERT(data, "Failed to load image: " + path);
     m_Width = width;
     m_Height = height;
 

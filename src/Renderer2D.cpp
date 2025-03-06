@@ -18,7 +18,8 @@ struct Renderer2DData {
     inline static const uint32_t MaxQuads = 10'000;
     inline static const uint32_t MaxVertices = MaxQuads * 4;
     inline static const uint32_t MaxIndices = MaxQuads * 6;
-    inline static const uint32_t MaxTextureSlots = 32;  // TODO: RenderCaps
+    inline static const uint32_t MaxTextureSlots = 32;
+    inline static Ref<Texture2D> s_CameraTexture = nullptr;
 
     Ref<VertexArray> QuadVertexArray;
     Ref<VertexBuffer> QuadVertexBuffer;
@@ -139,6 +140,35 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size,
                           const Ref<Texture2D>& texture, float tilingFactor,
                           const glm::vec4 tintColor) {
     DrawQuad({position.x, position.y, 0.0f}, size, texture, tilingFactor, tintColor);
+}
+
+void Renderer2D::DrawCVMat(const cv::Mat& frame, const glm::vec3& position, const glm::vec2& size) {
+    // Convert the frame from BGR (or grayscale) to RGBA
+    cv::Mat frameRGBA;
+    if (frame.channels() == 3)
+        cv::cvtColor(frame, frameRGBA, cv::COLOR_BGR2RGBA);
+    else if (frame.channels() == 1)
+        cv::cvtColor(frame, frameRGBA, cv::COLOR_GRAY2RGBA);
+    else if (frame.channels() == 4)
+        frameRGBA = frame;
+    else
+        frameRGBA = frame;  // fallback for unexpected formats
+
+    // If the camera texture is not yet created or the frame dimensions have changed, create a new
+    // texture
+    if (!Renderer2DData::s_CameraTexture ||
+        Renderer2DData::s_CameraTexture->GetWidth() != frameRGBA.cols ||
+        Renderer2DData::s_CameraTexture->GetHeight() != frameRGBA.rows) {
+        Renderer2DData::s_CameraTexture = CreateRef<Texture2D>(frameRGBA.cols, frameRGBA.rows);
+    }
+
+    // Update the texture with the new frame data.
+    // Note: total() * elemSize() gives the size in bytes.
+    Renderer2DData::s_CameraTexture->SetData(
+        frameRGBA.data, static_cast<uint32_t>(frameRGBA.total() * frameRGBA.elemSize()));
+
+    // Draw the camera frame as a quad
+    DrawQuad(position, size, Renderer2DData::s_CameraTexture);
 }
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
