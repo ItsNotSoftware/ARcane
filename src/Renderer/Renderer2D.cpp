@@ -94,9 +94,9 @@ void Renderer2D::Init() {
 
 void Renderer2D::Shutdown() { delete[] s_Data.QuadVertexBufferBase; }
 
-void Renderer2D::BeginScene(const OrthographicCamera& camera) {
+void Renderer2D::BeginScene(const Camera& camera) {
     s_Data.TextureShader->Bind();
-    s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+    s_Data.TextureShader->SetMat4("u_ViewProjection", camera.GetProjectionMatrix());
 
     s_Data.QuadIndexCount = 0;
     s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;

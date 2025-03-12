@@ -1,4 +1,4 @@
-#include "ARcane/Application.hpp"
+#include "ARcane/Core/Application.hpp"
 
 #include <GLFW/glfw3.h>
 

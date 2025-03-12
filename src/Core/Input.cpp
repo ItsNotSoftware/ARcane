@@ -1,6 +1,6 @@
-#include "ARcane/Input.hpp"
-#include "ARcane/Window.hpp"
-#include "ARcane/Application.hpp"
+#include "ARcane/Core/Input.hpp"
+#include "ARcane/Core/Window.hpp"
+#include "ARcane/Core/Application.hpp"
 
 #include <GLFW/glfw3.h>
 

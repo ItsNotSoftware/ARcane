@@ -1,8 +1,8 @@
-#include "ARcane/Window.hpp"
+#include "ARcane/Core/Window.hpp"
 
-#include "ARcane/Events/ApplicationEvent.hpp"
-#include "ARcane/Events/KeyEvent.hpp"
-#include "ARcane/Events/MouseEvent.hpp"
+#include "ARcane/Core/Events/ApplicationEvent.hpp"
+#include "ARcane/Core/Events/KeyEvent.hpp"
+#include "ARcane/Core/Events/MouseEvent.hpp"
 
 #include <GLFW/glfw3.h>
 

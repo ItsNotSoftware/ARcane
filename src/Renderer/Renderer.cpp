@@ -14,8 +14,8 @@ void Renderer::Init() {
     glEnable(GL_DEPTH_TEST);
 }
 
-void Renderer::BeginScene(OrthographicCamera& camera) {
-    s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+void Renderer::BeginScene(Camera& camera) {
+    s_SceneData->ViewProjectionMatrix = camera.GetProjectionMatrix();
 }
 
 void Renderer::EndScene() {}

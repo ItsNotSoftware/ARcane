@@ -1,4 +1,4 @@
-#include "ARcane/Log.hpp"
+#include "ARcane/Core/Log.hpp"
 
 namespace ARcane {
 

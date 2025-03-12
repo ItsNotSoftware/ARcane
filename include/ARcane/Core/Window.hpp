@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Events/Event.hpp"
+#include "ARcane/Core/Events/Event.hpp"
 
-#include "ARcane/Core.hpp"
+#include "ARcane/Core/Core.hpp"
 #include "ARcane/Renderer/GraphicsContext.hpp"
 
 struct GLFWwindow;

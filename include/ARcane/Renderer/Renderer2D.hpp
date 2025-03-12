@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ARcane/Renderer/OrthographicCamera.hpp"
+#include "ARcane/Camera/Camera.hpp"
 #include "ARcane/Renderer/Texture.hpp"
 #include <opencv2/opencv.hpp>
 
@@ -11,7 +11,7 @@ class Renderer2D {
     static void Init();
     static void Shutdown();
 
-    static void BeginScene(const OrthographicCamera& camera);
+    static void BeginScene(const Camera& camera);
     static void EndScene();
     static void Flush();
 

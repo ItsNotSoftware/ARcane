@@ -1,7 +1,7 @@
-#include "ARcane/Layers/ImGuiLayer.hpp"
+#include "ARcane/Core/Layers/ImGuiLayer.hpp"
 
-#include "ARcane/Core.hpp"
-#include "ARcane/Application.hpp"
+#include "ARcane/Core/Core.hpp"
+#include "ARcane/Core/Application.hpp"
 #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

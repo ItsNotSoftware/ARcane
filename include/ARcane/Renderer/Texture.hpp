@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ARcane/Core.hpp"
+#include "ARcane/Core/Core.hpp"
 #include <glad/glad.h>
 
 namespace ARcane {
