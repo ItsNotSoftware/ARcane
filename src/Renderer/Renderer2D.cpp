@@ -35,8 +35,6 @@ struct Renderer2DData {
     uint32_t TextureSlotIndex = 1;  // 0 = white texture
 
     glm::vec4 QuadVertexPositions[4];
-
-    Renderer2D::Statistics Stats;
 };
 
 static Renderer2DData s_Data;
@@ -81,7 +79,7 @@ void Renderer2D::Init() {
         samplers[i] = i;
     }
 
-    s_Data.TextureShader = CreateRef<Shader>(ARC_ASSET_PATH("shaders/Texture.glsl"));
+    s_Data.TextureShader = CreateRef<Shader>(ARC_ASSET_PATH("shaders/Texture2D.glsl"));
     s_Data.TextureShader->Bind();
     s_Data.TextureShader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
 
@@ -106,6 +104,7 @@ void Renderer2D::BeginScene(const Camera& camera) {
 }
 
 void Renderer2D::EndScene() {
+    // Calculate the size of the data in the vertex buffer
     uint32_t dataSize =
         (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
     s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
@@ -120,7 +119,6 @@ void Renderer2D::Flush() {
     }
 
     Renderer::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
-    s_Data.Stats.DrawCalls++;
 }
 
 void Renderer2D::FlushAndReset() {
@@ -224,8 +222,6 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
-
-    s_Data.Stats.QuadCount++;
 }
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
@@ -287,8 +283,6 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size,
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
-
-    s_Data.Stats.QuadCount++;
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -339,8 +333,6 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& siz
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
-
-    s_Data.Stats.QuadCount++;
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation,
@@ -409,12 +401,6 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& siz
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
-
-    s_Data.Stats.QuadCount++;
 }
-
-void Renderer2D::ResetStats() { memset(&s_Data.Stats, 0, sizeof(Statistics)); }
-
-Renderer2D::Statistics Renderer2D::GetStats() { return s_Data.Stats; }
 
 }  // namespace ARcane

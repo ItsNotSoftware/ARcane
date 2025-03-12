@@ -26,7 +26,10 @@ Application::Application() {
     PushOverlay(m_ImGuiLayer);
 }
 
-Application::~Application() {}
+Application::~Application() {
+    Renderer2D::Shutdown();
+    Renderer::Shutdown();
+}
 
 void Application::PushLayer(Layer* layer) {
     m_LayerStack.PushLayer(layer);

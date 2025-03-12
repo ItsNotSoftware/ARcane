@@ -10,26 +10,27 @@
 namespace ARcane {
 
 class Renderer {
-   public:
-    static void Init();
-    static void OnWindowResize(uint32_t width, uint32_t height);
+    friend class Application;
+    friend class Renderer2D;
 
-    static void BeginScene(Camera& camera);
-    static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray,
-                       const glm::mat4& transform = glm::mat4(1.0f));
+   public:
+    static void BeginScene(const Camera& camera);
     static void EndScene();
+    static void Flush();
 
     static void SetClearColor(const glm::vec4& color);
     static void Clear();
 
-    static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0);
+    static void DrawCube(const glm::vec3& position, const glm::vec3& size, const glm::vec4& color);
+    static void DrawRotatedCube(const glm::vec3& position, const glm::vec3& size,
+                                const glm::mat4& rotationMatrix, const glm::vec4& color);
 
    private:
-    struct SceneData {
-        glm::mat4 ViewProjectionMatrix;
-    };
+    static void Init();
+    static void Shutdown();
+    static void OnWindowResize(uint32_t width, uint32_t height);
 
-    static SceneData* s_SceneData;
+    static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0);
 };
 
 }  // namespace ARcane
