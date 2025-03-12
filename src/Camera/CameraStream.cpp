@@ -18,11 +18,16 @@ CameraStream::~CameraStream() {
 
 void CameraStream::StartSubscriberThread(const std::string& url) {
     // Connect to the publisher URL and subscribe to all messages
-    m_Subscriber.connect(url);
-    m_Subscriber.set(zmq::sockopt::subscribe, "");
+    try {
+        m_Subscriber.connect(url);
+        m_Subscriber.set(zmq::sockopt::subscribe, "");
 
-    m_Running = true;
-    m_SubscriberThread = std::thread(&CameraStream::SubscriberLoop, this);
+        m_Running = true;
+        m_SubscriberThread = std::thread(&CameraStream::SubscriberLoop, this);
+    } catch (const zmq::error_t& e) {
+        ARC_CORE_ERROR("Failed to connect to {}: {}", url, (const char*)e.what());
+        m_Running = false;
+    }
 }
 
 void CameraStream::SubscriberLoop() {
