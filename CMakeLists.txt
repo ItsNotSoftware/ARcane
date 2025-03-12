@@ -19,7 +19,8 @@ add_subdirectory(external/glm)
 find_package(OpenGL REQUIRED)
 find_package(OpenCV REQUIRED)
 
-file(GLOB ARCANE_SOURCES "src/*.cpp" "src/*.c")
+# Collect all source files from src subdirectories
+file(GLOB_RECURSE ARCANE_SOURCES "src/**/*.cpp" "src/**/*.c")
 
 # Define your main target (library or executable)
 add_library(ARcane STATIC ${ARCANE_SOURCES})
@@ -44,7 +45,7 @@ set(IMGUI_STDLIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/misc/cpp/imgui_stdlib.cpp
 )
 
-# Add all ImGui sources to your ARcane target.
+# Add all ImGui sources 
 target_sources(ARcane PRIVATE
     ${IMGUI_CORE_SOURCES}
     ${IMGUI_BACKEND_SOURCES}

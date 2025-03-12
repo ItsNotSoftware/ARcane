@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ARcane/Core.hpp"
-#include "ARcane/Events/Event.hpp"
-#include "ARcane/Timestep.hpp"
+#include "ARcane/Core/Core.hpp"
+#include "ARcane/Core/Events/Event.hpp"
+#include "ARcane/Core/Timestep.hpp"
 
 namespace ARcane {
 

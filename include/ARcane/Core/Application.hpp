@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ARcane/Window.hpp"
-#include "ARcane/Layers/LayerStack.hpp"
-#include "ARcane/Events/Event.hpp"
-#include "ARcane/Events/ApplicationEvent.hpp"
-#include "ARcane/Layers/ImGuiLayer.hpp"
-#include "ARcane/Core.hpp"
-#include "ARcane/Timestep.hpp"
+#include "ARcane/Core/Window.hpp"
+#include "ARcane/Core/Layers/LayerStack.hpp"
+#include "ARcane/Core/Events/Event.hpp"
+#include "ARcane/Core/Events/ApplicationEvent.hpp"
+#include "ARcane/Core/Layers/ImGuiLayer.hpp"
+#include "ARcane/Core/Core.hpp"
+#include "ARcane/Core/Timestep.hpp"
 #include "ARcane/Renderer/Renderer.hpp"
 #include "ARcane/Renderer/Renderer2D.hpp"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ARcane/Events/Event.hpp"
+#include "ARcane/Core/Events/Event.hpp"
 
 namespace ARcane {
 

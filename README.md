@@ -44,6 +44,8 @@ Ensure your development environment meets the following requirements:
 - **Compiler:** A C++17 (or newer) compliant compiler
 - **Build System:** [CMake](https://cmake.org/) (version 3.15 or higher recommended)
 - **Graphics:** [OpenGL 3.3](https://www.opengl.org/) (or newer)
+- **OpenCV:** [OpenCV](https://opencv.org/)
+- **ZMQ:** [ZeroMQ](https://zeromq.org/)
 
 ---
 

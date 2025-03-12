@@ -1,4 +1,4 @@
-#include "ARcane/Layers/LayerStack.hpp"
+#include "ARcane/Core/Layers/LayerStack.hpp"
 
 namespace ARcane {
 

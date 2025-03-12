@@ -11,7 +11,7 @@
 #include <fstream>
 #include <unordered_map>
 
-#include "ARcane/Log.hpp"
+#include "ARcane/Core/Log.hpp"
 #include "ARcane/Debug/Instrumentor.hpp"
 
 #define ARC_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
