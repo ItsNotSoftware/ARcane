@@ -13,3 +13,4 @@
 #include "ARcane/Camera/Camera.hpp"
 #include "ARcane/Renderer/Texture.hpp"
 #include "ARcane/Core/Timestep.hpp"
+#include "ARcane/Camera/CameraStream.hpp"

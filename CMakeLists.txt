@@ -1,31 +1,47 @@
 cmake_minimum_required(VERSION 3.15)
 project(ARcane LANGUAGES C CXX)
 
+# Set C++ standard and compile options
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+add_compile_options(-Wall)
 
 # Submodule initialization check
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
     message(FATAL_ERROR "Submodules missing! Run:\n\tgit submodule update --init --recursive")
 endif()
 
-# Submodules
-add_subdirectory(external/spdlog)
-add_subdirectory(external/glfw)
-add_subdirectory(external/glm)
+# Find required external libraries
+find_library(ZMQ_LIB zmq REQUIRED)
+if(NOT ZMQ_LIB)
+    message(FATAL_ERROR "ZeroMQ library not found!")
+endif()
 
 find_package(OpenGL REQUIRED)
 find_package(OpenCV REQUIRED)
 
-# Collect all source files from src subdirectories
+# Add subdirectories for submodules
+add_subdirectory(external/spdlog)
+add_subdirectory(external/glfw)
+add_subdirectory(external/glm)
+
+# Collect all source files from the src directory
 file(GLOB_RECURSE ARCANE_SOURCES "src/**/*.cpp" "src/**/*.c")
 
-# Define your main target (library or executable)
+# Define the ARcane static library target
 add_library(ARcane STATIC ${ARCANE_SOURCES})
 
-# Add ImGui core source files.
+# Include directories for ARcane
+target_include_directories(ARcane PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../glad/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../stb
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui # Core ImGui headers (e.g., imgui.h)
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends # Backend headers (e.g., imgui_impl_glfw.h)
+    ${OpenCV_INCLUDE_DIRS} # OpenCV headers
+)
+
+# Add ImGui source files
 set(IMGUI_CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_demo.cpp
@@ -33,45 +49,33 @@ set(IMGUI_CORE_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_tables.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/imgui_widgets.cpp
 )
-
-# Add the backend sources that match your project (GLFW + OpenGL3)
 set(IMGUI_BACKEND_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends/imgui_impl_glfw.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends/imgui_impl_opengl3.cpp
 )
-
-# Add std::string support if needed:
 set(IMGUI_STDLIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/misc/cpp/imgui_stdlib.cpp
 )
-
-# Add all ImGui sources 
 target_sources(ARcane PRIVATE
     ${IMGUI_CORE_SOURCES}
     ${IMGUI_BACKEND_SOURCES}
     ${IMGUI_STDLIB_SOURCES}
 )
 
-target_include_directories(ARcane PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../glad/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../stb
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui # For core ImGui headers (e.g., imgui.h)
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/imgui/backends # For backend headers (e.g., imgui_impl_glfw.h)
-    ${OpenCV_INCLUDE_DIRS} # Add this line to include OpenCV headers
-)
-
-# Link with other libraries
+# Link external libraries
 target_link_libraries(ARcane PUBLIC
     glfw
     glm
     OpenGL::GL
     spdlog::spdlog
     ${OpenCV_LIBS}
+    ${ZMQ_LIB}
 )
 
+# Set target version properties
 set_target_properties(ARcane PROPERTIES VERSION 1.0 SOVERSION 1)
 
+# Installation rules
 install(
     TARGETS ARcane
     ARCHIVE DESTINATION lib
@@ -83,5 +87,5 @@ install(
     DESTINATION include
 )
 
-# Define the path to the assets folder and pass it as a compile definition
+# Define assets directory as a compile definition
 target_compile_definitions(ARcane PUBLIC ASSETS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
