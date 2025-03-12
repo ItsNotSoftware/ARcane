@@ -1,4 +1,5 @@
 #include "ARcane/Renderer/Renderer2D.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "ARcane/Renderer/VertexArray.hpp"
 #include "ARcane/Renderer/Shader.hpp"
@@ -145,6 +146,12 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size,
 void Renderer2D::DrawCVMat(const cv::Mat& frame, const glm::vec3& position, const glm::vec2& size) {
     // Convert the frame from BGR (or grayscale) to RGBA
     cv::Mat frameRGBA;
+
+    if (frame.empty()) {
+        ARC_CORE_WARN("Empty frame passed to DrawCVMat");
+        return;
+    }
+
     if (frame.channels() == 3)
         cv::cvtColor(frame, frameRGBA, cv::COLOR_BGR2RGBA);
     else if (frame.channels() == 1)
@@ -154,11 +161,13 @@ void Renderer2D::DrawCVMat(const cv::Mat& frame, const glm::vec3& position, cons
     else
         frameRGBA = frame;  // fallback for unexpected formats
 
+    cv::flip(frameRGBA, frameRGBA, 0);  // flip the frame vertically
+
     // If the camera texture is not yet created or the frame dimensions have changed, create a new
     // texture
     if (!Renderer2DData::s_CameraTexture ||
-        Renderer2DData::s_CameraTexture->GetWidth() != frameRGBA.cols ||
-        Renderer2DData::s_CameraTexture->GetHeight() != frameRGBA.rows) {
+        Renderer2DData::s_CameraTexture->GetWidth() != (uint32_t)frameRGBA.cols ||
+        Renderer2DData::s_CameraTexture->GetHeight() != (uint32_t)frameRGBA.rows) {
         Renderer2DData::s_CameraTexture = CreateRef<Texture2D>(frameRGBA.cols, frameRGBA.rows);
     }
 
